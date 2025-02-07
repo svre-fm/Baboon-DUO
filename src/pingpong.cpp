@@ -6,12 +6,11 @@ Color Green = Color{38, 185, 154, 255};
 Color Dark_Green = Color{20, 160, 133, 255};
 Color Light_Green = Color{129, 204, 184, 255};
 Color Yellow = Color{243, 213, 91, 255};
-
+const int screen_width = 1280;
+const int screen_height = 800;
 int player_score = 0;
 int cpu_score = 0;
-
-const int screen_width = 1200;
-const int screen_height = 800;
+bool game_over = false; // Flag to check if the game is over
 
 class Ball {
  public:
@@ -24,6 +23,8 @@ class Ball {
     }
 
     void Update() {
+        if (game_over) return; // If the game is over, stop updating the ball
+
         x += speed_x;
         y += speed_y;
 
@@ -72,7 +73,16 @@ class Paddle {
         DrawRectangleRounded(Rectangle{x, y, width, height}, 0.8, 0, WHITE);
     }
 
-    void Update() {
+    virtual void Update() {
+        // Default controls for Paddle
+    }
+};
+
+class Player1Paddle : public Paddle {
+ public:
+    void Update() override {
+        if (game_over) return; // Stop updating paddles if the game is over
+
         if (IsKeyDown(KEY_UP)) {
             y = y - speed;
         }
@@ -83,13 +93,15 @@ class Paddle {
     }
 };
 
-class CpuPaddle : public Paddle {
+class Player2Paddle : public Paddle {
  public:
-    void Update(int ball_y){
-        if (y + height / 2 > ball_y) {
+    void Update() override {
+        if (game_over) return; // Stop updating paddles if the game is over
+
+        if (IsKeyDown(KEY_W)) {
             y = y - speed;
         }
-        if (y + height / 2 <= ball_y) {
+        if (IsKeyDown(KEY_S)) {
             y = y + speed;
         }
         LimitMovement();
@@ -97,46 +109,46 @@ class CpuPaddle : public Paddle {
 };
 
 Ball ball;
-Paddle player;
-CpuPaddle cpu;
+Player1Paddle player1;  // Player 1's paddle
+Player2Paddle player2; // Player 2's paddle
 
 void playpingpong() {
     std::cout << "Starting the game" << std::endl;
-    InitWindow(screen_width, screen_height, "My Pong Game!");
+    
+    InitWindow(screen_width, screen_height, "2 Player Pong Game!");
     SetTargetFPS(60);
     ball.radius = 20;
     ball.x = screen_width / 2;
     ball.y = screen_height / 2;
-    ball.speed_x = 7;
-    ball.speed_y = 7;
+    ball.speed_x = 9;
+    ball.speed_y = 9;
 
-    player.width = 25;
-    player.height = 120;
-    player.x = screen_width - player.width - 10;
-    player.y = screen_height / 2 - player.height / 2;
-    player.speed = 6;
+    player1.width = 25;
+    player1.height = 120;
+    player1.x = screen_width - player1.width - 10;
+    player1.y = screen_height / 2 - player1.height / 2;
+    player1.speed = 6;
 
-    cpu.height = 120;
-    cpu.width = 25;
-    cpu.x = 10;
-    cpu.y = screen_height / 2 - cpu.height / 2;
-    cpu.speed = 6;
+    player2.width = 25;
+    player2.height = 120;
+    player2.x = 10;
+    player2.y = screen_height / 2 - player2.height / 2;
+    player2.speed = 6;
 
     while (WindowShouldClose() == false) {
         BeginDrawing();
 
         // Updating
-
         ball.Update();
-        player.Update();
-        cpu.Update(ball.y);
+        player1.Update();
+        player2.Update();
 
         // Checking for collisions
-        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {player.x, player.y, player.width, player.height})) {
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {player1.x, player1.y, player1.width, player1.height})) {
             ball.speed_x *= -1;
         }
 
-        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {cpu.x, cpu.y, cpu.width, cpu.height})) {
+        if (CheckCollisionCircleRec({ball.x, ball.y}, ball.radius, {player2.x, player2.y, player2.width, player2.height})) {
             ball.speed_x *= -1;
         }
 
@@ -146,13 +158,27 @@ void playpingpong() {
         DrawCircle(screen_width / 2, screen_height / 2, 150, Light_Green);
         DrawLine(screen_width / 2, 0, screen_width / 2, screen_height, WHITE);
         ball.Draw();
-        cpu.Draw();
-        player.Draw();
+        player1.Draw();
+        player2.Draw();
         DrawText(TextFormat("%i", cpu_score), screen_width / 4 - 20, 20, 80, WHITE);
         DrawText(TextFormat("%i", player_score), 3 * screen_width / 4 - 20, 20, 80, WHITE);
+
+        // Check if any player has won
+        if (player_score == 3) {
+            DrawText("Player 1 Wins!", screen_width / 2 - 150, screen_height / 2 - 40, 80, WHITE);
+            DrawText("Press Enter to Exit", screen_width / 2 - 180, screen_height / 2 + 40, 40, WHITE);
+            game_over = true; // Set game_over flag to true
+        } else if (cpu_score == 3) {
+            DrawText("Player 2 Wins!", screen_width / 2 - 150, screen_height / 2 - 40, 80, WHITE);
+            DrawText("Press Enter to Exit", screen_width / 2 - 180, screen_height / 2 + 40, 40, WHITE);
+            game_over = true; // Set game_over flag to true
+        }
+
+        if (game_over && IsKeyPressed(KEY_ENTER)) {
+            CloseWindow();  // Close the game window if Enter is pressed
+        }
 
         EndDrawing();
     }
 
-    CloseWindow();
 }
