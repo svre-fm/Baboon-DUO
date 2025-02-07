@@ -1,5 +1,6 @@
 #include <raylib.h>
 #include <iostream>
+#include "pingpong.h"
 
 Color Green = Color{38, 185, 154, 255};
 Color Dark_Green = Color{20, 160, 133, 255};
@@ -8,6 +9,9 @@ Color Yellow = Color{243, 213, 91, 255};
 
 int player_score = 0;
 int cpu_score = 0;
+
+const int screen_width = 1280;
+const int screen_height = 800;
 
 class Ball {
  public:
@@ -96,10 +100,8 @@ Ball ball;
 Paddle player;
 CpuPaddle cpu;
 
-int main() {
+void playpingpong() {
     std::cout << "Starting the game" << std::endl;
-    const int screen_width = 1280;
-    const int screen_height = 800;
     InitWindow(screen_width, screen_height, "My Pong Game!");
     SetTargetFPS(60);
     ball.radius = 20;
@@ -153,5 +155,4 @@ int main() {
     }
 
     CloseWindow();
-    return 0;
 }
