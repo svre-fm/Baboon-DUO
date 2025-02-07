@@ -10,7 +10,7 @@ Color Yellow = Color{243, 213, 91, 255};
 int player_score = 0;
 int cpu_score = 0;
 
-const int screen_width = 1280;
+const int screen_width = 1200;
 const int screen_height = 800;
 
 class Ball {
