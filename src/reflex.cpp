@@ -11,7 +11,7 @@ const int screenHeight = 800;
 const int gridSize = 20;
 const int cols = screenWidth / gridSize;
 const int rows = screenHeight / gridSize;
-const int gameTime = 5;
+const int gameTime = 30;
 const int moveDelay = 4; // Delay for movement
 const int captureSize = 2; // Size of painted area
 
@@ -91,7 +91,7 @@ void playreflex() {
             DrawText(TextFormat("Player 1 Score: %d", p1Score), screenWidth / 2 - 200, screenHeight / 2 - 10, 40, RED);
             DrawText(TextFormat("Player 2 Score: %d", p2Score), screenWidth / 2 - 200, screenHeight / 2 + 40, 40, BLUE);
             EndDrawing();
-            WaitTimer(15);
+            WaitTimer(5);
             break;
         }
         
