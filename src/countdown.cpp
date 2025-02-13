@@ -1,5 +1,7 @@
 #include "countdown.h"
+#include <iostream>
 #include <string>
+#include <cmath>
 using namespace std;
 
 Countdown::Countdown(float duration) 
@@ -8,6 +10,7 @@ Countdown::Countdown(float duration)
 void Countdown::update(float deltaTime) {
     if (countdownTime > 0) {
         countdownTime -= deltaTime;
+        finished = false;
     } else {
         finished = true;
     }
@@ -24,7 +27,7 @@ void Countdown::reset(float duration) {
 
 string Countdown::getDisplayText() const{
     if(countdownTime > 0){
-        return to_string(static_cast<int>(countdownTime));
+        return to_string(static_cast<int>(ceil(countdownTime)));
     }else{
         return "Game start!!";
     }

@@ -1,216 +1,128 @@
-#include <iostream>
-#include <raylib.h>
-#include <vector>
-#include <string>
-#include <cstdlib>
-#include <ctime>
 #include "command.h"
-#include "waittime.h"
-#include "countdown.h"
-
-using namespace std;
-const int screenWidth = 1200;
-const int screenHeight = 800;
-
-vector<string> commands = {"Up", "Down", "Left", "Right"};
-vector<string> oppositeCommands = {"Down", "Up", "Right", "Left"};
-string currentCommand;
-bool gameOver = false;
-bool gamestart = false;
-bool p1Pressed = false;
-bool p2Pressed = false;
-bool waitfornextcommand = false;
-bool isOppositeCommand = false;
-int scorep1 = 0;
-int scorep2 = 0;
-int stage = 1;
-float stagetime = 30.0f;
-float txttime = 0.0f;
-float waitTime = 0.0f;
-Countdown countdown(3.0f);
-
-void positioncenter(string, int, Color);
-
-void generateCommand();
-
-void checkInput();
+#include "object.h"
+#include <iostream>
 
 void playcommand() {
-    InitWindow(screenWidth, screenHeight, "Command master");
-    SetTargetFPS(60);
-    srand(time(NULL));
+    GameState state;
+    generateCommand(state);
 
-    while (!WindowShouldClose()) {
-        if(!gamestart){
-            countdown.update(GetFrameTime());
-            if(countdown.isFinished()){
+    P1 P1;
+    P2 P2;
+    command command;
+    Commander commander;
+    oppositecommand opposite;
+
+    Vector2 PositionP1 = {745,626};
+    Vector2 PositionP2 = {367,626};
+    Vector2 PositionC1 = {184,463};
+    Vector2 PositionC2 = {856,463};
+    Vector2 Positioncommand = {240,202};
+    Vector2 Positionopposite = {600,202};
+
+
+    P1.setscale(4.0f);
+    P2.setscale(4.0f);
+    command.setscale(4.0f);
+    opposite.setscale(4.0f);
+    commander.setscale(4.0f);
+
+    
+    while (!WindowShouldClose()) {  
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawTexture(state.bg,0,0,WHITE);
+
+        if (!state.gamestart) {
+            state.countdown.update(GetFrameTime());
+            if (state.countdown.isFinished()) {
                 WaitTimer(1.5f);
-                gamestart = true;
-                generateCommand();
+                state.gamestart = true;
+                generateCommand(state);
             }
-        }else if (!gameOver) {
-            stagetime -= GetFrameTime();
-            txttime -= GetFrameTime();
+        } else if (!state.gameOver) {
+            state.stagetime -= GetFrameTime();
+            state.txttime -= GetFrameTime();
 
-            if(stagetime <= 0){
-                stage++;
-                if(stage > 3){
-                    gameOver = true;
-                }else{
-                    stagetime = 30.0f;
-                    generateCommand();
+            if (state.stagetime <= 0) {
+                state.stage++;
+                if(state.stage == 3 ){
+                    WaitTimer(1.0f);
+                    state.stagetime = 25.0f;
+                    generateCommand(state);
                 }
-
+                if (state.stage > 3) {
+                    state.gameOver = true;
+                } else {
+                    WaitTimer(1.0f);
+                    state.stagetime = 15.0f;
+                    generateCommand(state);
+                }
             }
-            if (!waitfornextcommand) {
-                checkInput();
-                if ((p1Pressed && p2Pressed) || txttime <= 0) {
-                    waitfornextcommand = true;
-                    waitTime = 3.0f;
+
+            if (!state.waitfornextcommand) {
+                checkInput(state);
+                if ((state.p1Pressed && state.p2Pressed) || state.txttime <= 0) {
+                    state.waitfornextcommand = true;
+                    state.waitTime = 1.5f;
                 }
             } else {
-                waitTime -= GetFrameTime(); // นับเวลาถอยหลังสำหรับรอ 3 วินาที
-                if (waitTime <= 0) {
-                    generateCommand(); // สุ่มคำสั่งใหม่
+                state.waitTime -= GetFrameTime(); // Countdown for waiting 3 seconds
+                if (state.waitTime <= 0) {
+                    generateCommand(state); // Generate new command
                 }
             }
         }
 
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        if(!gamestart){
-            string displaytext = countdown.getDisplayText();
-            positioncenter(displaytext,100 ,RED);
-        }else if (gameOver) {
-            if(scorep1 > scorep2){
-                positioncenter("Palyer 1 win",100 ,BLACK);
-            }else if(scorep2 > scorep1){
-                positioncenter("Palyer 2 win",100 ,BLACK);
-            }else if(scorep1 == scorep2){
-                positioncenter("Draw",100 ,BLACK);
-            }    
-        } else {
-            if (waitfornextcommand) {
-                DrawText("Waiting for next command...", 300, 200, 30, BLACK);
-            } else {
-                if (isOppositeCommand) {
-                DrawText(TextFormat("Command: %s", currentCommand.c_str()), 300, 200, 30, RED);
-                }else{
-                DrawText(TextFormat("Command: %s", currentCommand.c_str()), 300, 200, 30, BLUE); 
-                }
+        if (!state.gamestart) {
+            string displaytext = state.countdown.getDisplayText();
+            positioncenter(displaytext, 100, RED);
+        } else if (state.gameOver) {
+            if (state.scorep1 > state.scorep2) {
+                positioncenter("Player 1 win", 100, BLUE);
+            } else if (state.scorep2 > state.scorep1) {
+                positioncenter("Player 2 win", 100, RED);
+            } else if (state.scorep1 == state.scorep2) {
+                positioncenter("Draw", 100, BLACK);
             }
-            DrawText(TextFormat("Time: %.1f", txttime), 350, 300, 30, BLACK);
-            DrawText(TextFormat("Score P1: %d", scorep1), 400, 400, 30, BLUE);
-            DrawText(TextFormat("Score P2: %d", scorep2), 200, 400, 30, BLUE);
+        } else {
+
+            P1.draw(PositionP1, state.p1CurrentFrame);
+            P2.draw(PositionP2, state.p2CurrentFrame);
+
+            if (!state.waitfornextcommand) {
+                if (state.isOppositeCommand) {
+                    commander.draw(PositionC2, 3);
+                    commander.draw(PositionC1, 0);
+                    if(state.currentCommand == "Up") opposite.draw(Positionopposite,0);
+                    if(state.currentCommand == "Down") opposite.draw(Positionopposite,1);
+                    if(state.currentCommand == "Left") opposite.draw(Positionopposite,2);
+                    if(state.currentCommand == "Right") opposite.draw(Positionopposite,3);
+                } else {
+                    commander.draw(PositionC1, 1);
+                    commander.draw(PositionC2, 2);
+                    if(state.currentCommand == "Up") command.draw(Positioncommand,0);
+                    if(state.currentCommand == "Down") command.draw(Positioncommand,1);
+                    if(state.currentCommand == "Left") command.draw(Positioncommand,2);
+                    if(state.currentCommand == "Right") command.draw(Positioncommand,3);
+                }
+            }else{
+                commander.draw(PositionC1, 0);
+                commander.draw(PositionC2, 2);
+            }
+            const char* scoreTextP2 = TextFormat("Score P2: %d", state.scorep2);
+            const char* scoreTextP1 = TextFormat("Score P1: %d", state.scorep1);
+            drawTextBox(scoreTextP1, 1000, 22, 30, BLUE, WHITE, BLUE,2);
+            drawTextBox(scoreTextP2, 35, 22, 30, RED, WHITE, RED,2);
+            DrawText("P1",790,600,30,BLUE);
+            DrawText("P2",410,600,30,RED);
+
         }
 
         EndDrawing();
-    }
-
-    CloseWindow();
-}
-
-void positioncenter(string txt, int fontsize ,Color colortxt){
-    int textwidth = MeasureText(txt.c_str(), fontsize);
-    int txtX = (screenWidth - textwidth)/2;
-    int txtY = (screenHeight - fontsize)/2;
-    DrawText(txt.c_str(),txtX,txtY,fontsize,colortxt);
-}
-
-void generateCommand() {
-    txttime = 5.0f; 
-    if(stage == 1){
-        isOppositeCommand = false;
-        currentCommand = commands[rand() % commands.size()];
-    }else if(stage == 2){
-        isOppositeCommand = true;
-        int index = rand() % commands.size();
-        currentCommand = oppositeCommands[index];
-    }else{
-        isOppositeCommand = (rand()%2 == 0);
-        if(isOppositeCommand){
-            int index = rand() % commands.size();
-            currentCommand = oppositeCommands[index];
-        }else{
-            currentCommand = commands[rand() % commands.size()];
+        if (WindowShouldClose()) {
+            break; 
         }
     }
-    p1Pressed = false;
-    p2Pressed = false;
-    waitfornextcommand = false;
-}
-
-void checkInput() {
-    if (!p1Pressed) {
-        if (isOppositeCommand) {
-            if (currentCommand == "Down" && IsKeyPressed(KEY_UP)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Up" && IsKeyPressed(KEY_DOWN)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Right" && IsKeyPressed(KEY_LEFT)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Left" && IsKeyPressed(KEY_RIGHT)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)) {
-                p1Pressed = true; 
-            }
-        } else {
-            
-            if (currentCommand == "Up" && IsKeyPressed(KEY_UP)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Down" && IsKeyPressed(KEY_DOWN)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Left" && IsKeyPressed(KEY_LEFT)) {
-                p1Pressed = true;
-                scorep1++; 
-            } else if (currentCommand == "Right" && IsKeyPressed(KEY_RIGHT)) {
-                p1Pressed = true;
-                scorep1++;
-            } else if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)) {
-                p1Pressed = true; 
-            }
-        }
-    }
-    if (!p2Pressed) {
-        if (isOppositeCommand) {
-            if (currentCommand == "Down" && IsKeyPressed(KEY_W)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Up" && IsKeyPressed(KEY_S)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Right" && IsKeyPressed(KEY_A)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Left" && IsKeyPressed(KEY_D)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
-                p2Pressed = true;
-            }
-        } else {
-            
-            if (currentCommand == "Up" && IsKeyPressed(KEY_W)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Down" && IsKeyPressed(KEY_S)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Left" && IsKeyPressed(KEY_A)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (currentCommand == "Right" && IsKeyPressed(KEY_D)) {
-                p2Pressed = true;
-                scorep2++; 
-            } else if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
-                p2Pressed = true;
-            }
-        }
-    }
+    state.isGameRunning = false;
 }
