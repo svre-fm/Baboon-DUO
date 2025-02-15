@@ -6,9 +6,13 @@
 #include <string>
 
 class Memory {
+public:
+    Memory();
+    void Run();
+
 private:
-    const int screenWidth = 1200;
-    const int screenHeight = 800;
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
 
     int round;
     int player1_score;
@@ -17,30 +21,26 @@ private:
     std::vector<std::string> random_moves;
     std::vector<char> correct_p1;
     std::vector<int> correct_p2;
+    std::vector<char> display_p1;
+    std::vector<char> display_p2;
 
     std::vector<char> player1_inputs;
     std::vector<int> player2_inputs;
 
-    std::vector<char> display_p1;
-    std::vector<char> display_p2;
-
     int correct_count_p1;
     int correct_count_p2;
 
-    bool player1_failed;
-    bool player2_failed;
-
+    bool showing_target;
+    bool players_can_type;
     int current_index;
     float timer;
     float display_duration;
-    bool showing_target;
+    
+    int countdown; // ตัวแปรสำหรับนับถอยหลัง
 
-public:
-    Memory();
     void GenerateNewRound();
     void Update();
     void Draw();
-    void Run();
 };
 
 #endif

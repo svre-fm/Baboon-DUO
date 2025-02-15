@@ -1,6 +1,7 @@
 #include "Memory.h"
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 
 Memory::Memory() {
     InitWindow(screenWidth, screenHeight, "Memory Game (Raylib)");
@@ -20,13 +21,12 @@ Memory::Memory() {
     correct_count_p1 = 0;
     correct_count_p2 = 0;
 
-    player1_failed = false;
-    player2_failed = false;
-
+    players_can_type = false;
     current_index = 0;
     timer = 0;
-    display_duration = 1.5f;  // 1.5s for showing each target (1s normal, 0.5s background color)
+    display_duration = 2.0f;  // 2 วินาทีต่อเลข (1 วิ สีปกติ + 1 วิ สีพื้นหลัง)
     showing_target = true;
+    countdown = 3;
 
     GenerateNewRound();
 }
@@ -60,98 +60,71 @@ void Memory::GenerateNewRound() {
     correct_count_p1 = 0;
     correct_count_p2 = 0;
 
-    player1_failed = false;
-    player2_failed = false;
-
+    players_can_type = false;
     current_index = 0;
     timer = 0;
     showing_target = true;
+    countdown = 3;
 }
 
 void Memory::Update() {
-    // ติดตามเวลาการแสดงเป้าหมาย
     timer += GetFrameTime();
     
     if (showing_target) {
-        // แสดงตัวเลขในช่วงเวลา 1.5 วินาที
-        if (timer >= 1.0f && timer < 1.5f) {
-            // แสดงตัวเลขด้วยสีปกติในช่วง 1 วินาทีแรก
-            showing_target = true;
-        } else if (timer >= 1.5f) {
-            // ตัวเลขหายไปในช่วง 0.5 วินาทีที่เหลือ
+        if (timer >= display_duration) {
             timer = 0;
             current_index++;
-            
-            // เปลี่ยนไปแสดงเลขถัดไปหลังจากแสดงครบ 1.5 วินาที
+
             if (current_index >= 5) {
                 showing_target = false;
+                countdown = 3;  // ตั้งค่าเริ่มต้นนับถอยหลัง
             }
         }
-    }
-
-    // ✅ Player 1 (WASD) - รีเซ็ตเมื่อกดผิด
-    if (!player1_failed && (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_D))) {
-        char input = 0;
-        if (IsKeyPressed(KEY_W)) input = 'w';
-        else if (IsKeyPressed(KEY_A)) input = 'a';
-        else if (IsKeyPressed(KEY_S)) input = 's';
-        else if (IsKeyPressed(KEY_D)) input = 'd';
-
-        int index = player1_inputs.size();
-        if (index < 5) {
-            player1_inputs.push_back(input);
-            if (input == correct_p1[index]) {
-                display_p1[index] = '+';
-                correct_count_p1++;
-            } else {
-                display_p1[index] = '-';
-                player1_failed = true;
+    } else if (countdown > 0) {
+        if (timer >= 1.0f) {
+            timer = 0;
+            countdown--;
+            if (countdown == 0) {
+                players_can_type = true;
             }
         }
-    }
+    } else if (players_can_type) {
+        if (player1_inputs.size() < 5 && (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_D))) {
+            char input = 0;
+            if (IsKeyPressed(KEY_W)) input = 'w';
+            else if (IsKeyPressed(KEY_A)) input = 'a';
+            else if (IsKeyPressed(KEY_S)) input = 's';
+            else if (IsKeyPressed(KEY_D)) input = 'd';
 
-    // ✅ Player 2 (Arrow Keys) - รีเซ็ตเมื่อกดผิด
-    if (!player2_failed && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT))) {
-        int input = 0;
-        if (IsKeyPressed(KEY_UP)) input = KEY_UP;
-        else if (IsKeyPressed(KEY_LEFT)) input = KEY_LEFT;
-        else if (IsKeyPressed(KEY_DOWN)) input = KEY_DOWN;
-        else if (IsKeyPressed(KEY_RIGHT)) input = KEY_RIGHT;
-
-        int index = player2_inputs.size();
-        if (index < 5) {
-            player2_inputs.push_back(input);
-            if (input == correct_p2[index]) {
-                display_p2[index] = '+';
-                correct_count_p2++;
-            } else {
-                display_p2[index] = '-';
-                player2_failed = true;
+            int index = player1_inputs.size();
+            if (index < 5) {
+                player1_inputs.push_back(input);
+                display_p1[index] = (input == correct_p1[index]) ? '+' : '-';
+                if (input == correct_p1[index]) correct_count_p1++;
             }
         }
-    }
 
-    // ✅ ถ้าผู้เล่นพิมพ์ผิด ต้องพิมพ์ใหม่
-    if (player1_failed) {
-        player1_inputs.clear();
-        display_p1.assign(5, '_');
-        correct_count_p1 = 0;
-        player1_failed = false;
-    }
-    if (player2_failed) {
-        player2_inputs.clear();
-        display_p2.assign(5, '_');
-        correct_count_p2 = 0;
-        player2_failed = false;
-    }
+        if (player2_inputs.size() < 5 && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT))) {
+            int input = 0;
+            if (IsKeyPressed(KEY_UP)) input = KEY_UP;
+            else if (IsKeyPressed(KEY_LEFT)) input = KEY_LEFT;
+            else if (IsKeyPressed(KEY_DOWN)) input = KEY_DOWN;
+            else if (IsKeyPressed(KEY_RIGHT)) input = KEY_RIGHT;
 
-    // ✅ ถ้าทีมใดทีมหนึ่งได้ + ครบ 5 ตัว ให้ไปด่านต่อไปทันที  
-    if (correct_count_p1 == 5) {
-        player1_score++;
-        GenerateNewRound();
-    } else if (correct_count_p2 == 5) {
-        player2_score++;
-        GenerateNewRound();
+            int index = player2_inputs.size();
+            if (index < 5) {
+                player2_inputs.push_back(input);
+                display_p2[index] = (input == correct_p2[index]) ? '+' : '-';
+                if (input == correct_p2[index]) correct_count_p2++;
+            }
+        }
+
+        if (player1_inputs.size() == 5 && player2_inputs.size() == 5) {
+            if (correct_count_p1 == 5) player1_score++;
+            if (correct_count_p2 == 5) player2_score++;
+            round++;
+            GenerateNewRound();
+        }
     }
 }
 
@@ -164,17 +137,13 @@ void Memory::Draw() {
     DrawText(TextFormat("Player 1 Score: %d", player1_score), 100, 140, 30, RED);
     DrawText(TextFormat("Player 2 Score: %d", player2_score), 900, 140, 30, BLUE);
 
-    DrawText("Target:", 550, 200, 30, BLACK);
-
     if (showing_target && current_index < 5) {
-        // แสดงตัวเลขที่ตำแหน่งกลางหน้าจอ
-        if (timer < 1.0f) {
-            // 1 วินาทีแรกเป็นสีปกติ
-            DrawText(random_moves[current_index].c_str(), GetScreenWidth() / 2 - MeasureText(random_moves[current_index].c_str(), 50) / 2, GetScreenHeight() / 2 - 25, 50, BLACK);
-        } else {
-            // 0.5 วินาทีถัดไปเป็นสีพื้นหลัง
-            DrawText(random_moves[current_index].c_str(), GetScreenWidth() / 2 - MeasureText(random_moves[current_index].c_str(), 50) / 2, GetScreenHeight() / 2 - 25, 50, RAYWHITE);
-        }
+        Color textColor = (fmodf(timer, 2.0f) < 1.0f) ? BLACK : RAYWHITE;
+        DrawText(random_moves[current_index].c_str(), screenWidth / 2 - 50, screenHeight / 2 - 50, 50, textColor);
+    }
+
+    if (!showing_target && countdown > 0) {
+        DrawText(TextFormat("%d", countdown), screenWidth / 2 - 20, screenHeight / 2 - 50, 60, BLACK);
     }
 
     DrawText("Player 1:", 200, 350, 30, RED);
