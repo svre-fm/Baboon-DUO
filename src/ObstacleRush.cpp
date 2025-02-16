@@ -1,6 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <cmath>
+#include "Object.h"
 
 using namespace std;
 
@@ -15,23 +16,23 @@ using namespace std;
 
 void playObstacleRush()
 {
-    float car1_width = 30, car1_height = 50;
-    float car2_width = 30, car2_height = 50;
-
-    float car1_x = Bounce_screen + 20 ;
-    float car1_y = MAP_HEIGHT - car1_height - Bounce_screen;
-
-    float car2_x = Bounce_screen + 80; 
-    float car2_y = MAP_HEIGHT - car2_height - Bounce_screen;
-
-    float car1_speed = 0, car1_rotation = 0;
-    float car2_speed = 0, car2_rotation = 0;
-
-    bool game_over = false;
-    string winner = "";
-
     InitWindow(MAP_WIDTH, MAP_HEIGHT, "Obstacle Rush");
     SetTargetFPS(60);
+   
+    Car cars;
+
+    float car1_width = 20, car1_height = 50; 
+    float car2_width = 20, car2_height = 50;
+    // ถ้าเปลี่ยนขนาดรถในคำสั้ง draw ต้องแก้ car_width,height ด้วย เวลาชนกับ object จะได้ชนถูก
+    
+    float car1_x = Bounce_screen + 20 ;
+    float car1_y = MAP_HEIGHT - car1_height - Bounce_screen;
+    float car2_x = Bounce_screen + 80; 
+    float car2_y = MAP_HEIGHT - car2_height - Bounce_screen;
+    float car1_speed = 0, car1_rotation = 0;
+    float car2_speed = 0, car2_rotation = 0;
+    bool game_over = false;
+    string winner = "";
 
     while (!WindowShouldClose()) {    
         float dt = GetFrameTime();
@@ -40,17 +41,21 @@ void playObstacleRush()
 
         cout << car1_speed << " " << car2_speed << endl;
 
-        Vector2 car_origin = { car1_width / 2, car1_height / 2 };
+        
         Rectangle car1_rec = { car1_x, car1_y, car1_width, car1_height };
         Rectangle car2_rec = { car2_x, car2_y, car2_width, car2_height };
-        Rectangle finish_line = { MAP_WIDTH - 300, 50, 300, 20 };
-        Rectangle obstacles[] = {
-            { 200, 300, 10, 500 },
-            { 700, 300, 120, 60 },
-            { 500, 600, 80, 40 },
-            { 500, 600, 10 , 500}
-        };
+        Rectangle finish_line = {920, 50, 300, 20 };
         
+        // Define obstacles with different shapes and positions
+        Rectangle obstacles[] = {
+            {250, 250, 20,550},
+            
+            {250,250,350,20},
+            {550,500,370,20},
+            
+            {900, 0, 20,500}
+        };
+
         int num_obstacles = sizeof(obstacles) / sizeof(obstacles[0]);
 
         if(!game_over){
@@ -162,23 +167,22 @@ void playObstacleRush()
             }
         }
         
+        // วาดเส้นชัย
+        DrawRectangleRec(finish_line, GREEN);
+        DrawText("Finish Line", finish_line.x + 100 , finish_line.y - 20, 20, BLACK);
+      
         //วาดสิ่งกีดขวาง
         for (int i = 0; i < num_obstacles; i++) {
             DrawRectangleRec(obstacles[i], GRAY);
         }
 
-        // วาดเส้นชัย
-        DrawRectangleRec(finish_line, GREEN);
-        DrawText("Finish Line", finish_line.x + 100 , finish_line.y - 20, 20, BLACK);
-      
         // วาดรถ
-        DrawRectanglePro(car1_rec, car_origin, car1_rotation, Car1_color);
-        DrawRectanglePro(car2_rec, car_origin, car2_rotation, Car2_color);
+        cars.draw(1, car1_rec, car1_rotation, 0.06);
+        cars.draw(2, car2_rec, car2_rotation, 0.06);
 
         if (game_over){
             DrawText(winner.c_str(), MAP_WIDTH / 2 - 100, MAP_HEIGHT / 2, 40, RED);
         }
-        
         
         EndDrawing();
     }
