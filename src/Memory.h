@@ -11,36 +11,42 @@ public:
     void Run();
 
 private:
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
+    void GenerateNewRound();
+    void Update();
+    void Draw();
+
+    const int screenWidth = 1200;
+    const int screenHeight = 800;
+
+    Texture2D img1, img2, img3, img4, img5;
+    Texture2D img6, img7, img8, img9, img10, img11,img12;
 
     int round;
-    int player1_score;
-    int player2_score;
-
+    int player1_score, player2_score;
     std::vector<std::string> random_moves;
     std::vector<char> correct_p1;
     std::vector<int> correct_p2;
-    std::vector<char> display_p1;
-    std::vector<char> display_p2;
 
     std::vector<char> player1_inputs;
     std::vector<int> player2_inputs;
 
+    std::vector<int> display_p1;
+    std::vector<int> display_p2;
+
     int correct_count_p1;
     int correct_count_p2;
 
-    bool showing_target;
     bool players_can_type;
     int current_index;
     float timer;
     float display_duration;
-    
-    int countdown; // ตัวแปรสำหรับนับถอยหลัง
+    bool showing_target;
+    int countdown;
 
-    void GenerateNewRound();
-    void Update();
-    void Draw();
+    float countdownTimer; // ตัวจับเวลา 7.5 วินาที
+    Texture2D player1Image;  // ภาพของ player1
+    Texture2D player2Image;  // ภาพของ player2
+    int jump;
 };
 
 #endif
