@@ -244,3 +244,79 @@ void Commander::draw(Vector2 position,int direction) const {
 void Commander::setscale(float scale){
     this->scale = scale;
 }
+
+check::check(){
+    load();
+}
+
+check::~check(){
+    unload();
+}
+
+void check::load(){
+    incorrect = LoadTexture("pic/Incorrect.png");
+    correct = LoadTexture("pic/correct.png");
+    blank = LoadTexture("pic/blank.png");
+}
+
+void check::unload(){
+    UnloadTexture(incorrect);
+    UnloadTexture(correct);
+    UnloadTexture(blank);
+}
+
+void check::draw(Vector2 position,int direction) const {
+    Texture2D texture;
+    switch (direction)
+    {
+    case 0:
+        texture = correct;
+        break;
+    case 1:
+        texture = incorrect;
+        break;
+    default :
+        texture = blank;
+    }
+
+    DrawTextureEx(texture,position,0.0f,scale,WHITE);
+}
+
+void check::setscale(float scale){
+    this->scale = scale;
+}
+
+
+result::result(){
+    load();
+}
+
+result::~result(){
+    unload();
+}
+
+void result::load(){
+    P1win = LoadTexture("pic/P1win.png");
+    P2win = LoadTexture("pic/P2win.png");
+    Draw = LoadTexture("pic/Draw.png");
+}
+
+void result::unload(){
+    UnloadTexture(P1win);
+    UnloadTexture(P2win);
+    UnloadTexture(Draw);
+}
+
+void result::draw(int direction) const {
+    switch (direction){
+    case 0:
+        DrawTexture(P1win,0,0,WHITE);
+        break;
+    case 1:
+        DrawTexture(P2win,0,0,WHITE);
+        break;
+    default :
+        DrawTexture(Draw,0,0,WHITE);
+    }
+
+}

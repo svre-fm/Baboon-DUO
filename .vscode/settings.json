@@ -10,6 +10,7 @@
 	},
 	"C_Cpp.errorSquiggles": "disabled",
 	"files.associations": {
-		"atomic": "cpp"
+		"atomic": "cpp",
+		"iostream": "cpp"
 	}
 }

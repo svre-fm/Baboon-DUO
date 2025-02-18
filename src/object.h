@@ -102,3 +102,36 @@ class Commander{
 
         float scale;
 };
+
+class check{
+    public:
+        check();
+        ~check();
+        void load();
+        void unload();
+        void draw(Vector2 position,int direction) const;
+        void setscale(float scale);
+        Vector2 position;
+        int direction;
+
+    private:
+        Texture2D correct;
+        Texture2D incorrect;
+        Texture2D blank;
+
+        float scale;
+};
+
+class result{
+    public:
+        result();
+        ~result();
+        void load();
+        void unload();
+        void draw(int direction) const;
+
+    private:
+        Texture2D P1win;
+        Texture2D P2win;
+        Texture2D Draw;
+};
