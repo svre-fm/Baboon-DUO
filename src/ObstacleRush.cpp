@@ -21,8 +21,8 @@ void playObstacleRush()
    
     Car cars;
 
-    float car1_width = 20, car1_height = 50; 
-    float car2_width = 20, car2_height = 50;
+    float car1_width = 20, car1_height = 40; 
+    float car2_width = 20, car2_height = 40;
     // ถ้าเปลี่ยนขนาดรถในคำสั้ง draw ต้องแก้ car_width,height ด้วย เวลาชนกับ object จะได้ชนถูก
     
     float car1_x = Bounce_screen + 20 ;
@@ -34,6 +34,11 @@ void playObstacleRush()
     bool game_over = false;
     string winner = "";
 
+    float Bush01_width = 600, Bush01_height = 530;
+    float Bush02_width = 600, Bush02_height = 518;
+    float Tree_03_width = 950, Tree_03_height = 948;
+    float Tree_04_width = 950, Tree_04_height = 816;
+
     while (!WindowShouldClose()) {    
         float dt = GetFrameTime();
         BeginDrawing();
@@ -41,11 +46,18 @@ void playObstacleRush()
 
         cout << car1_speed << " " << car2_speed << endl;
 
-        
         Rectangle car1_rec = { car1_x, car1_y, car1_width, car1_height };
         Rectangle car2_rec = { car2_x, car2_y, car2_width, car2_height };
-        Rectangle finish_line = {920, 50, 300, 20 };
-        
+        Rectangle finish_line = {920, 50, 280, 20 };
+        Rectangle background_rec = { 0, 0, MAP_WIDTH, MAP_HEIGHT };
+
+        Rectangle objectBush1[] ={
+            {30, 30, Bush01_width, Bush01_height},
+            {150, 800, Bush01_width, Bush01_height},
+            {1000, 700, Bush01_width, Bush01_width},
+            {800, 300, Bush01_width, Bush01_height}
+        };
+
         // Define obstacles with different shapes and positions
         Rectangle obstacles[] = {
             {250, 250, 20,550},
@@ -57,7 +69,7 @@ void playObstacleRush()
         };
 
         int num_obstacles = sizeof(obstacles) / sizeof(obstacles[0]);
-
+        int num_objectBush1 = sizeof(objectBush1) / sizeof(objectBush1[0]);
         if(!game_over){
             // ควบคุมรถคันที่ 1
             if (IsKeyDown(KEY_W)) car1_speed += Speed_increment * dt;
@@ -165,21 +177,28 @@ void playObstacleRush()
                 game_over = true;
                 winner = "Player 2 Wins!";
             }
+
+            cars.drawBackground(background_rec,1);
+            DrawRectangleRec(finish_line, GREEN);
+            DrawText("Finish Line", finish_line.x + 100 , finish_line.y - 20, 20, BLACK);
+          
+            //วาดสิ่งกีดขวาง
+            for (int i = 0; i < num_obstacles; i++) {
+                DrawRectangleRec(obstacles[i], GRAY);
+            }
+
+            //วาด Object
+            for (int i = 0; i < num_objectBush1; i++) {
+                cars.drawObject(1,objectBush1[i],0,0.2);
+            }
+    
+            // วาดรถ
+            cars.drawCar(1, car1_rec, car1_rotation, 0.06);
+            cars.drawCar(2, car2_rec, car2_rotation, 0.06);
+
         }
         
         // วาดเส้นชัย
-        DrawRectangleRec(finish_line, GREEN);
-        DrawText("Finish Line", finish_line.x + 100 , finish_line.y - 20, 20, BLACK);
-      
-        //วาดสิ่งกีดขวาง
-        for (int i = 0; i < num_obstacles; i++) {
-            DrawRectangleRec(obstacles[i], GRAY);
-        }
-
-        // วาดรถ
-        cars.draw(1, car1_rec, car1_rotation, 0.06);
-        cars.draw(2, car2_rec, car2_rotation, 0.06);
-
         if (game_over){
             DrawText(winner.c_str(), MAP_WIDTH / 2 - 100, MAP_HEIGHT / 2, 40, RED);
         }
@@ -189,3 +208,8 @@ void playObstacleRush()
 
     CloseWindow();
 }
+
+// งานวันที่ 18/2/68
+//  -ลบ background เปลี่ยนเป็นภาพขาว
+//  -เพิ่ม graphic 
+//  -คำนวนหน้าต่างตำแหน่ง x y ให้หม่วย
