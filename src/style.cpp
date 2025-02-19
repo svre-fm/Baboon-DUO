@@ -1,23 +1,5 @@
 #include "style.h"
 
-style::style(){
-    load();
-}
-
-style::~style(){
-    unload();
-}
-
-void style::load(){
-    fontA = LoadFont("Font/LoveYaLikeASister-Regular.ttf");
-    fontB = LoadFont("Font/SourGummy-VariableFont_wdth,wght.ttf");
-}
-
-void style::unload(){
-    UnloadFont(fontA);
-    UnloadFont(fontB);
-}
-
 void style::drawTextBox(const char* text, float posX, float posY, int fontSize, Color textColor, Color boxColor, Color borderColor, int borderSize) {
     
     int textWidth = MeasureText(text, fontSize);

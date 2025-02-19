@@ -5,7 +5,6 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
-#include "waittime.h"
 #include "countdown.h"
 #include "object.h"
 #include "style.h"
@@ -28,7 +27,7 @@ struct GameState {
     int scorep1 = 0;
     int scorep2 = 0;
     int stage = 1;
-    float stagetime = 15.0f;
+    float stagetime = 10.0f;
     float txttime = 0.0f;
     float waitTime = 0.0f;
     float wait = 0.0f;

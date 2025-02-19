@@ -22,6 +22,8 @@ void playcommand() {
     commander.setscale(0.25f);
     check.setscale(0.8f);
 
+    float wait = 1.5f;
+
     while (!WindowShouldClose()) {  
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -31,33 +33,29 @@ void playcommand() {
         if (!state.gamestart) {
             state.countdown.update(GetFrameTime());
             if (state.countdown.isFinished()) {
-                WaitTimer(1.5f);
-                state.gamestart = true;
-                generateCommand(state);
+                wait -= GetFrameTime();
+                if(wait <= 0){
+                    state.gamestart = true;
+                    generateCommand(state);
+                }
             }
         } else if (!state.gameOver) {
             state.stagetime -= GetFrameTime();
             state.txttime -= GetFrameTime();
 
             if (state.stagetime <= 0) {
-                if (state.wait <= 0) {
-                    state.wait = 1.5f;
-                } else {
-                    state.wait -= GetFrameTime();
-                    if (state.wait <= 0) {
                         state.stage++;
+                        if (state.stage == 2) {
+                            state.stagetime = 10.0f;
+                            generateCommand(state);
+                        }
                         if (state.stage == 3) {
-                            state.stagetime = 25.0f;
+                            state.stagetime = 30.0f;
                             generateCommand(state);
                         }
                         if (state.stage > 3) {
                             state.gameOver = true;
-                        } else {
-                            state.stagetime = 15.0f;
-                            generateCommand(state);
                         }
-                    }
-                }
             }
 
             if (!state.waitfornextcommand) {
@@ -137,5 +135,4 @@ void playcommand() {
             break; 
         }
     }
-    state.isGameRunning = false;
 }

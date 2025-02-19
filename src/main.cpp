@@ -1,6 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include "command.h"
+#include "tutorial_CM.h"
 
 using namespace std;
 
@@ -9,23 +10,59 @@ int main() {
     SetTargetFPS(60);
     GameState state;
 
-    while (!WindowShouldClose()) {  // ตรวจสอบว่าผู้ใช้ปิดหน้าต่างหรือไม่
+    while (!WindowShouldClose()) {  
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         if (!state.isGameRunning) {
             DrawText("Select Game", 150, 50, 30, BLACK);
             DrawText("1. Command Master", 150, 150, 25, DARKGRAY);
+            DrawText("2. PingPong", 150, 200, 25, DARKGRAY);
+            DrawText("3. Paint", 150, 250, 25, DARKGRAY);
+            DrawText("4. Obstacle-Rush", 150, 300, 25, DARKGRAY);
+            DrawText("5. Memorygame", 150, 350, 25, DARKGRAY);
 
             if (IsKeyPressed(KEY_ONE)) {
-                state.isGameRunning = true;
-                playcommand(); // เรียก playcommand() โดยตรง
+                bool Ready = false;
+                showtutorial(Ready);
+                if(Ready){
+                    playcommand();
+                }
             }
+            if (IsKeyPressed(KEY_TWO)) {
+                bool Ready = false;
+                showtutorial(Ready);
+                if(Ready){
+                    playcommand();
+                }
+            }
+            if (IsKeyPressed(KEY_THREE)) {
+                bool Ready = false;
+                showtutorial(Ready);
+                if(Ready){
+                    playcommand();
+                }
+            }
+            if (IsKeyPressed(KEY_FOUR)) {
+                bool Ready = false;
+                showtutorial(Ready);
+                if(Ready){
+                    playcommand();
+                }
+            }
+            if (IsKeyPressed(KEY_FIVE)) {
+                bool Ready = false;
+                showtutorial(Ready);
+                if(Ready){
+                    playcommand();
+                }
+            }
+
         }
 
         EndDrawing();
     }
 
-    CloseWindow();  // ปิดหน้าต่างและจบการทำงานของเกม
+    CloseWindow(); 
     return 0;
 }
