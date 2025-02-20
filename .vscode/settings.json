@@ -9,7 +9,4 @@
 		"**/*.exe": true,
 	},
 	"C_Cpp.errorSquiggles": "enabled",
-	"files.associations": {
-		"iostream": "cpp"
-	}
 }
