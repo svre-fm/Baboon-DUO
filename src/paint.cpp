@@ -134,7 +134,7 @@ void playpaint() {
 
         // ควบคุมผู้เล่น 1
         if (player1.stunTime > 0)
-        player2.stunTime -= GetTime;
+        player1.stunTime -= GetTime;
         else {
             if (player1.moveCooldown == 0) {
                 if (IsKeyDown(KEY_UP) && player1.y > 0) player1.y--;
