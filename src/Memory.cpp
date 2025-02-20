@@ -15,8 +15,14 @@ Memory::Memory() {
     img9 = LoadTexture("pic/ete2.png");
     img10 = LoadTexture("pic/score_1.png");
     img11 = LoadTexture("pic/score_2.png");
-    img12 =  LoadTexture("pic/bg.png");
-    
+    img12 = LoadTexture("pic/bg.png");
+    img13 = LoadTexture("pic/obj1.png");
+    img14 = LoadTexture("pic/obj2.png");
+
+    imgup = LoadTexture("pic/up.png");      // รูป up
+    imgleft = LoadTexture("pic/left.png");  // รูป left
+    imgdown = LoadTexture("pic/down.png");  // รูป down
+    imgright = LoadTexture("pic/right.png"); // รูป right
 
     SetTargetFPS(60);
     srand(time(0));
@@ -86,11 +92,14 @@ void Memory::GenerateNewRound() {
 }
 
 void Memory::Update() {
-    timer += GetFrameTime();
-    countdownTimer += GetFrameTime();  // นับเวลารวมของตัวนับ 7.5 วินาที
+    if (round > 5) {  
+        return;  // ถ้าครบ 5 รอบแล้ว ไม่ต้องอัปเดตอะไรอีก
+    }
 
-    // การสลับภาพในช่วงเวลาต่างๆ
-    if (countdownTimer < 1.5f) {
+    timer += GetFrameTime();
+    countdownTimer += GetFrameTime();
+
+if (countdownTimer < 1.5f) {
         player1Image = img1;  // ช่วงแรก player1 ใช้ img1
         player2Image = img2;  // ช่วงแรก player2 ใช้ img2
         jump = 0;
@@ -119,14 +128,15 @@ void Memory::Update() {
     //}
 
 
+
     if (showing_target) {
-        if (timer >= display_duration) {
+        if (timer >= 1.5f) {  // ครบ 2 วินาที (1.5s แสดง + 0.5s ซ่อน)
             timer = 0;
             current_index++;
 
-            if (current_index >= 5) {
+            if (current_index >= 5) {  // แสดงครบ 5 รูปแล้ว
                 showing_target = false;
-                countdown = 3;  // ตั้งค่าเริ่มต้นนับถอยหลัง
+                countdown = 3;  // เริ่มนับถอยหลัง
             }
         }
     } else if (countdown > 0) {
@@ -178,17 +188,25 @@ void Memory::Update() {
     }
 }
 
+
 void Memory::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
     DrawTexture(img12, 0, 0, WHITE);
+    DrawTexture(img13, 430, 400, WHITE);
+    DrawTexture(img14, 405, -100, WHITE);
 
-    DrawTexture(player1Image, 100, 500-jump, WHITE);  // ใช้ player1Image แทน img1
-    DrawTexture(player2Image, 800, 500-jump, WHITE);  // ใช้ player2Image แทน img2
-    
-    DrawText("Memory Game", 450, 20, 40, DARKBLUE);
-    DrawText(TextFormat("Round: %d", round), 500, 80, 30, BLACK);
+    if (round > 5) {
+        DrawText("Game Over", screenWidth / 2 - 100, screenHeight / 2, 50, RED);
+        EndDrawing();
+        return;
+    }
+
+    DrawTexture(player1Image, 100, 500 - jump, WHITE);
+    DrawTexture(player2Image, 800, 500 - jump, WHITE);
+
+    DrawText(TextFormat("Round: %d", round), 480, 160, 50, BLACK);
 
     DrawTextureEx(img10, (Vector2){150, 30}, 0.0f, 0.5f, WHITE);
     DrawTextureEx(img11, (Vector2){870, 30}, 0.0f, 0.5f, WHITE);
@@ -197,25 +215,34 @@ void Memory::Draw() {
     DrawText(TextFormat("%d", player2_score), 930, 200, 30, RED);
 
     if (showing_target && current_index < 5) {
-        Color textColor = (fmodf(timer, 1.5f) < 1.0f) ? BLACK : RAYWHITE;
-        DrawText(random_moves[current_index].c_str(), screenWidth / 2 - 50, screenHeight / 2 - 50, 50, textColor);
+        if (timer <= 1.0f) {  // แสดงภาพ 1.5 วินาที
+            if (random_moves[current_index] == "up") {
+                DrawTextureEx(imgup, (Vector2){screenWidth / 2 - 35, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+            } else if (random_moves[current_index] == "down") {
+                DrawTextureEx(imgdown, (Vector2){screenWidth / 2 - 40, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+            } else if (random_moves[current_index] == "left") {
+                DrawTextureEx(imgleft, (Vector2){screenWidth / 2 - 48, screenHeight / 2 + 92}, 0.0f, 0.35f, WHITE);
+            } else if (random_moves[current_index] == "right") {
+                DrawTextureEx(imgright, (Vector2){screenWidth / 2 - 48, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+            }
+        }
+        // ถ้า timer > 1.5s (ช่วง 0.5 วินาทีสุดท้าย) → ไม่ต้องวาดอะไรเลย
     }
 
     if (!showing_target && countdown > 0) {
-        DrawText(TextFormat("%d", countdown), screenWidth / 2 - 20, screenHeight / 2 - 50, 60, BLACK);
+        DrawText(TextFormat("%d", countdown), screenWidth / 2 - 25, screenHeight / 2 + 85, 60, BLACK);
     }
     for (int i = 0; i < 5; i++) {
         DrawTexture((display_p1[i] == 0) ? img3 : (display_p1[i] == 1) ? img4 : img5, 100 + (i * 60), 400, WHITE);
     }
-
     for (int i = 0; i < 5; i++) {
         DrawTexture((display_p2[i] == 0) ? img3 : (display_p2[i] == 1) ? img4 : img5, 800 + (i * 60), 400, WHITE);
     }
 
+
+
     EndDrawing();
 }
-
-
 
 void Memory::Run() {
     while (!WindowShouldClose()) {
@@ -232,6 +259,10 @@ void Memory::Run() {
     UnloadTexture(img7);
     UnloadTexture(img8);
     UnloadTexture(img9);
+    UnloadTexture(imgup);
+    UnloadTexture(imgleft);
+    UnloadTexture(imgdown);
+    UnloadTexture(imgright);
 
     CloseWindow();
 }

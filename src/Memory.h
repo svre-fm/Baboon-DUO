@@ -18,8 +18,9 @@ private:
     const int screenWidth = 1200;
     const int screenHeight = 800;
 
-    Texture2D img1, img2, img3, img4, img5;
-    Texture2D img6, img7, img8, img9, img10, img11,img12;
+    Texture2D img1, img2, img3, img4, img5, img13, img14;
+    Texture2D img6, img7, img8, img9, img10, img11, img12;
+    Texture2D imgup, imgdown, imgleft, imgright; // รูปภาพทิศทาง
 
     int round;
     int player1_score, player2_score;
