@@ -19,7 +19,7 @@ const int moveDelay = 4;
 const int captureSize = 2; // ขนาดพื้นที่กินสี
 const float endGameDelay = 8.0f;
 const float bombDuration = 5.0f;
-Texture2D p1, p2, p1s, p2s, bg, score_bg, ground, b1, b2, b3, p1w, p2w, draw;
+Texture2D p1, p2, p1s, p2s, bg, score_bg, b1, b2, b3, p1w, p2w, draw;
 
 // ตำแหน่งสนาม
 const int fieldX = (screenWidth - fieldSize) / 2;
@@ -68,7 +68,6 @@ void playpaint() {
     p2s = LoadTexture("pic/p2stunned.png");
     bg = LoadTexture("pic/bg.png");
     score_bg = LoadTexture("pic/score5.png");
-    ground = LoadTexture("pic/ground.jpg");
     b1 = LoadTexture("pic/banana.png");
     b2 = LoadTexture("pic/banana3.png");
     p1w = LoadTexture("pic/p1win.png");
