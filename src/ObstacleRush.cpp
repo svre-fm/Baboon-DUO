@@ -25,9 +25,9 @@ void playObstacleRush()
     float car2_width = 20, car2_height = 40;
     // ถ้าเปลี่ยนขนาดรถในคำสั้ง draw ต้องแก้ car_width,height ด้วย เวลาชนกับ object จะได้ชนถูก
     
-    float car1_x = Bounce_screen + 20 ;
+    float car1_x = Bounce_screen + 60 ;
     float car1_y = MAP_HEIGHT - car1_height - Bounce_screen;
-    float car2_x = Bounce_screen + 80; 
+    float car2_x = Bounce_screen + 150; 
     float car2_y = MAP_HEIGHT - car2_height - Bounce_screen;
     float car1_speed = 0, car1_rotation = 0;
     float car2_speed = 0, car2_rotation = 0;
@@ -48,28 +48,58 @@ void playObstacleRush()
 
         Rectangle car1_rec = { car1_x, car1_y, car1_width, car1_height };
         Rectangle car2_rec = { car2_x, car2_y, car2_width, car2_height };
-        Rectangle finish_line = {920, 50, 280, 20 };
         Rectangle background_rec = { 0, 0, MAP_WIDTH, MAP_HEIGHT };
+        Rectangle finish_line = {920, 100, 280, 40 };
+        Rectangle Line_rec[] = {
+            {0 , 650, 1400, 445},
+            {920, 50, 1400, 445 }
+        };
+        
 
-        Rectangle objectBush1[] ={
+        Rectangle objectBush1[] = {
             {30, 30, Bush01_width, Bush01_height},
-            {150, 800, Bush01_width, Bush01_height},
-            {1000, 700, Bush01_width, Bush01_width},
-            {800, 300, Bush01_width, Bush01_height}
+            {150, 800, Bush01_width, Bush01_height}
+        };
+
+        Rectangle objectBush2[] = {
+            {1100, 550, Bush02_width, Bush02_height},
+            {800, 300, Bush02_width, Bush02_height}
+        };
+
+        Rectangle objectTree3[] = {
+            {300, 70, Tree_03_width, Tree_03_height},
+            {1000, 700, Tree_03_width, Tree_03_height}
+        };
+
+        Rectangle objectTree4[] = {
+            {500, 800, Tree_04_width, Tree_04_height},
+            {900, 250, Tree_04_width, Tree_04_height}
         };
 
         // Define obstacles with different shapes and positions
         Rectangle obstacles[] = {
-            {250, 250, 20,550},
+            {280, 250, 20,550},
             
-            {250,250,350,20},
-            {550,500,370,20},
+            {280, 250, 350, 20},
+            {550, 500, 370, 20},
             
-            {900, 0, 20,500}
+            {900, 0, 20, 500}
+        };
+        Rectangle obstaclesTexture[] = {
+            {300, 250, 0, 0},
+            {300,490,0, 0},
+            {300,730,0,0},
+
+            {300,250,0,0},
+            {400,250,0,0}
         };
 
         int num_obstacles = sizeof(obstacles) / sizeof(obstacles[0]);
         int num_objectBush1 = sizeof(objectBush1) / sizeof(objectBush1[0]);
+        int num_objectBush2 = sizeof(objectBush2) / sizeof(objectBush2[0]);
+        int num_objectTree3 = sizeof(objectTree3) / sizeof(objectTree3[0]);
+        int num_objectTree4 = sizeof(objectTree4) / sizeof(objectTree4[0]);
+
         if(!game_over){
             // ควบคุมรถคันที่ 1
             if (IsKeyDown(KEY_W)) car1_speed += Speed_increment * dt;
@@ -178,27 +208,41 @@ void playObstacleRush()
                 winner = "Player 2 Wins!";
             }
 
+            DrawRectangleRec(finish_line, RED);
             cars.drawBackground(background_rec,1);
-            DrawRectangleRec(finish_line, GREEN);
-            DrawText("Finish Line", finish_line.x + 100 , finish_line.y - 20, 20, BLACK);
-          
+            cars.drawLine(Line_rec,0.2);
+            
+            
             //วาดสิ่งกีดขวาง
             for (int i = 0; i < num_obstacles; i++) {
                 DrawRectangleRec(obstacles[i], GRAY);
             }
+            cars.drawObstacle(obstaclesTexture[0],90,0.4);
+            cars.drawObstacle(obstaclesTexture[1],90,0.4);
+            cars.drawObstacle(obstaclesTexture[2],90,0.4);
+            cars.drawObstacle(obstaclesTexture[3],0,0.4);
+            cars.drawObstacle(obstaclesTexture[4],0,0.4);
+
+            // วาดรถ
+            cars.drawCar(1, car1_rec, car1_rotation, 0.06);
+            cars.drawCar(2, car2_rec, car2_rotation, 0.06);
 
             //วาด Object
             for (int i = 0; i < num_objectBush1; i++) {
                 cars.drawObject(1,objectBush1[i],0,0.2);
             }
-    
-            // วาดรถ
-            cars.drawCar(1, car1_rec, car1_rotation, 0.06);
-            cars.drawCar(2, car2_rec, car2_rotation, 0.06);
+            for (int i = 0; i < num_objectBush2; i++) {
+                cars.drawObject(2,objectBush2[i],0,0.2);
+            }
+            for (int i = 0; i < num_objectTree3; i++) {
+                cars.drawObject(3,objectTree3[i],0,0.2);
+            }
+            for (int i = 0; i < num_objectTree4; i++) {
+                cars.drawObject(4,objectTree4[i],0,0.2);
+            }
 
         }
         
-        // วาดเส้นชัย
         if (game_over){
             DrawText(winner.c_str(), MAP_WIDTH / 2 - 100, MAP_HEIGHT / 2, 40, RED);
         }

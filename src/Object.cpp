@@ -19,6 +19,10 @@ void Car::load() {
     object2 = LoadTexture("graphics/Bush_02.png");
     object3 = LoadTexture("graphics/Tree_03.png");
     object4 = LoadTexture("graphics/Tree_04.png");
+    obtacle = LoadTexture("graphics/Obstacle.png");
+
+    startline1 = LoadTexture("graphics/Start.png");
+    finishline2 = LoadTexture("graphics/Finish.png");
 
     car1 = LoadTexture("graphics/Car_1.png");
     car2 = LoadTexture("graphics/Car_2.png");
@@ -85,4 +89,23 @@ void Car::drawObject(int objectNum, Rectangle objectRec, float rotation, float s
     Vector2 origin = { (ObjectTexture.width * scale) / 2, (ObjectTexture.height * scale) / 2 };
 
     DrawTexturePro(ObjectTexture, sourceRec, destRec, origin, rotation, WHITE);
+}
+
+void Car::drawLine(Rectangle lineRec[2], float scale) const{
+
+    Rectangle sourceRec1 = { 0.0f, 0.0f, (float)startline1.width, (float)startline1.height };
+    Rectangle destRec1 = { lineRec[0].x, lineRec[0].y, startline1.width * scale, startline1.height * scale };
+
+    Rectangle sourceRec2 = { 0.0f, 0.0f, (float)finishline2.width, (float)finishline2.height };
+    Rectangle destRec2 = { lineRec[1].x, lineRec[1].y, finishline2.width * scale, finishline2.height * scale };
+
+    DrawTexturePro(startline1, sourceRec1, destRec1, {0,0}, 0, WHITE);
+    DrawTexturePro(finishline2, sourceRec2, destRec2, {0,0}, 0, WHITE);
+}
+
+void Car::drawObstacle(Rectangle ObstacleRec,float rotation,float scale) const{
+    Rectangle sourceRec = { 0.0f, 0.0f, (float)obtacle.width, (float)obtacle.height };
+    Rectangle destRec = { ObstacleRec.x, ObstacleRec.y, obtacle.width * scale, obtacle.height * scale };
+
+    DrawTexturePro(obtacle, sourceRec, destRec, {0,0}, rotation, WHITE);
 }
