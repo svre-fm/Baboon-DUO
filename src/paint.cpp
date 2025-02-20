@@ -19,6 +19,7 @@ const int moveDelay = 4;
 const int captureSize = 2; // ขนาดพื้นที่กินสี
 const float endGameDelay = 8.0f;
 const float bombDuration = 5.0f;
+Texture2D p1, p2, p1s, p2s, bg, score_bg, ground, b1, b2, b3, p1w, p2w, draw;
 
 // ตำแหน่งสนาม
 const int fieldX = (screenWidth - fieldSize) / 2;
@@ -41,33 +42,50 @@ struct Bomb {
 Bomb bomb; // ตรวจสอบระเบิด
 bool bombActive = false;
 float bombTimer = 0.0f;
-
-// จุดเริ่มต้นผู้เล่น
-void positioncenter(string txt, int fontsize ,Color colortxt){
-    int textwidth = MeasureText(txt.c_str(), fontsize);
-    int txtX = (screenWidth - textwidth)/2;
-    int txtY = (screenHeight - fontsize)/2;
-    DrawText(txt.c_str(),txtX,txtY,fontsize,colortxt);
-}
+float animationTimer = 0.0f;
+bool toggleImage = false;
+bool playerHitBomb = false;
 
 void WaitTimer(float seconds) {
     float startTime = GetTime();
     while (GetTime() - startTime < seconds);
 }
 
+// ผู้เล่นชนระเบิด
+bool p1hitbomb(int px, int py, int bx, int by) {
+    return (px >= bx - 1 && px <= bx + 1) && (py >= by - 1 && py <= by + 1);
+}
+bool p2hitbomb(int px, int py, int bx, int by) {
+    return (px >= bx - 1 && px <= bx + 1) && (py >= by - 1 && py <= by + 1);
+}
+
 void playpaint() {
     InitWindow(screenWidth, screenHeight, "Paint the Colors");
+
+    p1 = LoadTexture("pic/p1.png");
+    p2 = LoadTexture("pic/p2.png");
+    p1s = LoadTexture("pic/p1stunned.png");
+    p2s = LoadTexture("pic/p2stunned.png");
+    bg = LoadTexture("pic/bg.png");
+    score_bg = LoadTexture("pic/score5.png");
+    ground = LoadTexture("pic/ground.jpg");
+    b1 = LoadTexture("pic/banana.png");
+    b2 = LoadTexture("pic/banana3.png");
+    p1w = LoadTexture("pic/p1win.png");
+    p2w = LoadTexture("pic/p2win.png");
+    draw = LoadTexture("pic/draw.png");
+
     SetTargetFPS(60);
 
     // พื้นที่กินสี
-    Player player1 = {0, 0, RED, 0, 0};
-    Player player2 = {cols - 1, rows - 1, BLUE, 0, 0};
+    Player player1 = {0, 0, BLUE, 0, 0};
+    Player player2 = {cols - 1, rows - 1, RED, 0, 0};
     
-    vector<vector<Color>> grid(rows, vector<Color>(cols, WHITE));
+    vector<vector<Color>> grid(rows, vector<Color>(cols, BROWN));
     
     float timer = gameTime;
     bool gameRunning = true;
-
+    
     while (!WindowShouldClose() && gameRunning) {
         if(!gameover){
             float GetTime = GetFrameTime();
@@ -84,6 +102,11 @@ void playpaint() {
             bombActive = true;
             bombTimer = 0.0f;
         }
+        animationTimer += GetFrameTime();
+        if (animationTimer >= 0.5f && bombActive) {
+            toggleImage = !toggleImage;
+            animationTimer = 0.0f;
+        }
 
         // ตรวจสอบหากไม่มีใครชนภายในระเบิด 5 วินาที จะหายไป
         if (bombActive) {
@@ -95,19 +118,13 @@ void playpaint() {
 
         // ตรวจสอบผู้เล่นชนระเบิด
         if (bombActive) {
-            if ((player1.x == bomb.x && player1.y == bomb.y) ||
-                (player1.x == bomb.x+1 && player1.y == bomb.y) ||
-                (player1.x == bomb.x && player1.y-1 == bomb.y) ||
-                (player1.x == bomb.x+1 && player1.y-1 == bomb.y) &&
+            if ((p1hitbomb(player1.x, player1.y, bomb.x, bomb.y)) &&
                 player1.stunTime <= 0) {
                 player1.stunTime = 2.0f;
                 bombActive = false;
             }
 
-            if ((player2.x == bomb.x && player2.y == bomb.y) ||
-                (player2.x == bomb.x+1 && player2.y == bomb.y) ||
-                (player2.x == bomb.x && player2.y-1 == bomb.y) ||
-                (player2.x == bomb.x+1 && player2.y-1 == bomb.y) &&
+            if ((p2hitbomb(player2.x, player2.y, bomb.x, bomb.y)) &&
                 player2.stunTime <= 0) {
                 player2.stunTime = 2.0f;
                 bombActive = false;
@@ -161,48 +178,65 @@ void playpaint() {
         player2.score = 0;
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                if (grid[r][c].r == RED.r) player1.score++;
-                if (grid[r][c].b == BLUE.b) player2.score++;
+                if (grid[r][c].r == BLUE.r) player1.score++;
+                if (grid[r][c].b == RED.b) player2.score++;
             }
         }
     }
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
+        
         if(!gameover){
         
+        DrawTextureEx(bg, (Vector2){0, 0}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(score_bg, (Vector2){25, 48}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(score_bg, (Vector2){915, 45}, 0.0f, 1.05f, WHITE);
+
         // ชื่อเกม
-        DrawText("Paint the Colors", screenWidth / 2 - 210, 30, 50, BLACK);
+        DrawText("Paint the Colors", 388, 30, 50, WHITE);
 
         // วาดสนามแข่ง
-        DrawRectangleLines(fieldX, fieldY, fieldSize, fieldSize, BLACK);
+        DrawRectangleLinesEx((Rectangle){fieldX, fieldY, fieldSize, fieldSize}, 2, BLACK);
+        // วาดกริดสี
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 DrawRectangle(fieldX + c * gridSize, fieldY + r * gridSize, gridSize, gridSize, grid[r][c]);
             }
         }
-        
+                
         // วาดระเบิด
-        if (bombActive) {
-            DrawRectangle(fieldX + bomb.x * gridSize, fieldY + bomb.y * gridSize, gridSize * 2, gridSize * 2, BLACK);
-        }
-        
+        Texture2D bomb_texture;
+        bomb_texture = toggleImage ? b1 : b2;
+        DrawTextureEx(bomb_texture, (Vector2){(float)(fieldX + bomb.x * gridSize), (float)(fieldY + bomb.y * gridSize)}, 0.0f, 0.17f, WHITE);
+            
         // วาดผู้เล่น
-        DrawRectangle(fieldX + player1.x * gridSize, fieldY + player1.y * gridSize, gridSize, gridSize, Color{200, 0, 0, 255});
-        DrawRectangle(fieldX + player2.x * gridSize, fieldY + player2.y * gridSize, gridSize, gridSize, Color{0, 0, 200, 255});
+        Texture2D player1_texture = (player1.stunTime > 0) ? p1s : p1;
+        Texture2D player2_texture = (player2.stunTime > 0) ? p2s : p2;
+
+        // วาดผู้เล่น
+        DrawTextureEx(player1_texture, (Vector2){(float)(fieldX + player1.x * gridSize - 47), (float)(fieldY + player1.y * gridSize - 28)}, 0.0f, 0.4f, WHITE);
+        DrawTextureEx(player2_texture, (Vector2){(float)(fieldX + player2.x * gridSize - 55), (float)(fieldY + player2.y * gridSize - 28)}, 0.0f, 0.4f, WHITE);
 
         // แสดงคะแนนเรียลไทม์
-        DrawText(TextFormat("Player 1: %d", player1.score), 50, 90, 30, RED);
-        DrawText(TextFormat("Player 2: %d", player2.score), screenWidth - 250, 90, 30, BLUE);
-        DrawText(TextFormat("Time: %.1f", timer), screenWidth / 2 - 80, 90, 30, BLACK);
+        DrawText(TextFormat("Player 1: %d", player1.score), 60, 90, 30, BLUE);
+        DrawText(TextFormat("Player 2: %d", player2.score), 950, 90, 30, RED);
+        DrawText(TextFormat("Time: %.1f", timer), 530, 100, 30, WHITE);
         }else{
+            UnloadTexture(score_bg);
+            UnloadTexture(bg);
             if(player1.score > player2.score){
-                positioncenter("Player 1 win!",100 ,RED);
+                DrawText(TextFormat("Player 1 Win!"), 392, 100, 70, BLUE);
+                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
+                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
             }else if(player2.score > player1.score){
-                positioncenter("Player 2 win!",100 ,BLUE);
+                DrawText(TextFormat("Player 2 Win!"), 392, 100, 70, RED);
+                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
+                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
             }else if(player1.score == player2.score){
-                positioncenter("Draw!",100 ,BLACK);
+                DrawText(TextFormat("Draw!"), 480, 100, 70, WHITE);
+                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
+                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
             }  
         }
         
@@ -210,5 +244,13 @@ void playpaint() {
     }
     
     WaitTimer(endGameDelay);
+
+    UnloadTexture(p1);
+    UnloadTexture(p1s);
+    UnloadTexture(p2);
+    UnloadTexture(p2s);
+    UnloadTexture(b1);
+    UnloadTexture(b2);
+
     CloseWindow();
 }
