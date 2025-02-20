@@ -1,6 +1,10 @@
 #include <iostream>
 #include <raylib.h>
 #include "command.h"
+#include "Memory.h"
+#include "paint.h"
+#include "pingpong.h"
+#include "ObstacleRush.h"
 #include "tutorial_CM.h"
 
 using namespace std;
@@ -9,7 +13,7 @@ int main() {
     InitWindow(1200, 800, "Baboon DUO");
     SetTargetFPS(60);
     GameState state;
-
+    Memory play;
     while (!WindowShouldClose()) {  
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -33,28 +37,28 @@ int main() {
                 bool Ready = false;
                 showtutorial(Ready);
                 if(Ready){
-                    playcommand();
+                    playpingpong();
                 }
             }
             if (IsKeyPressed(KEY_THREE)) {
                 bool Ready = false;
                 showtutorial(Ready);
                 if(Ready){
-                    playcommand();
+                    playpaint();
                 }
             }
             if (IsKeyPressed(KEY_FOUR)) {
                 bool Ready = false;
                 showtutorial(Ready);
                 if(Ready){
-                    playcommand();
+                    playObstacleRush();
                 }
             }
             if (IsKeyPressed(KEY_FIVE)) {
                 bool Ready = false;
                 showtutorial(Ready);
                 if(Ready){
-                    playcommand();
+                    play.Run();
                 }
             }
 
