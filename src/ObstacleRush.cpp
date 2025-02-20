@@ -1,7 +1,7 @@
 #include <iostream>
 #include <raylib.h>
 #include <cmath>
-#include "Object.h"
+#include "DrawObject_ObstacleRush.h"
 
 using namespace std;
 

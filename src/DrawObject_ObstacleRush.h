@@ -25,7 +25,6 @@ DRAW::DRAW() {
     load();
 }
 
-
 DRAW::~DRAW() {
     unload();
 }
