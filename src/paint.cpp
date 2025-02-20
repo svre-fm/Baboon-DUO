@@ -134,13 +134,13 @@ void playpaint() {
 
         // ควบคุมผู้เล่น 1
         if (player1.stunTime > 0)
-        player1.stunTime -= GetTime;
+        player2.stunTime -= GetTime;
         else {
             if (player1.moveCooldown == 0) {
-                if (IsKeyDown(KEY_W) && player1.y > 0) player1.y--;
-                if (IsKeyDown(KEY_S) && player1.y < rows - 1) player1.y++;
-                if (IsKeyDown(KEY_A) && player1.x > 0) player1.x--;
-                if (IsKeyDown(KEY_D) && player1.x < cols - 1) player1.x++;
+                if (IsKeyDown(KEY_UP) && player1.y > 0) player1.y--;
+                if (IsKeyDown(KEY_DOWN) && player1.y < rows - 1) player1.y++;
+                if (IsKeyDown(KEY_LEFT) && player1.x > 0) player1.x--;
+                if (IsKeyDown(KEY_RIGHT) && player1.x < cols - 1) player1.x++;
                 player1.moveCooldown = moveDelay;
             } else {
                 player1.moveCooldown--;
@@ -152,10 +152,10 @@ void playpaint() {
         player2.stunTime -= GetTime;
         else {
             if (player2.moveCooldown == 0) {
-                if (IsKeyDown(KEY_UP) && player2.y > 0) player2.y--;
-                if (IsKeyDown(KEY_DOWN) && player2.y < rows - 1) player2.y++;
-                if (IsKeyDown(KEY_LEFT) && player2.x > 0) player2.x--;
-                if (IsKeyDown(KEY_RIGHT) && player2.x < cols - 1) player2.x++;
+                if (IsKeyDown(KEY_W) && player2.y > 0) player2.y--;
+                if (IsKeyDown(KEY_S) && player2.y < rows - 1) player2.y++;
+                if (IsKeyDown(KEY_A) && player2.x > 0) player2.x--;
+                if (IsKeyDown(KEY_D) && player2.x < cols - 1) player2.x++;
                 player2.moveCooldown = moveDelay;
             } else {
                 player2.moveCooldown--;

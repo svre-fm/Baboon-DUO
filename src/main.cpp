@@ -1,5 +1,6 @@
 #include <iostream>
 #include <raylib.h>
+#include "paint.h"
 
 using namespace std;
 
@@ -10,6 +11,13 @@ int main() {
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
+            DrawText("select game", 150, 50, 30, BLACK);
+            DrawText("1. Paint", 150, 150, 25, DARKGRAY);
+
+             if (IsKeyPressed(KEY_ONE)) {
+                playpaint();
+            }
+
         EndDrawing();
     }
 
