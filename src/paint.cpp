@@ -19,7 +19,7 @@ const int moveDelay = 4;
 const int captureSize = 2; // ขนาดพื้นที่กินสี
 const float endGameDelay = 8.0f;
 const float bombDuration = 5.0f;
-Texture2D p1, p2, p1s, p2s, bg, score_bg, b1, b2, b3, p1w, p2w, draw;
+Texture2D p1, p2, p1s, p2s, bg, score_bg, ground, b1, b2, b3, p1w, p2w, draw;
 
 // ตำแหน่งสนาม
 const int fieldX = (screenWidth - fieldSize) / 2;
@@ -44,7 +44,7 @@ bool bombActive = false;
 float bombTimer = 0.0f;
 float animationTimer = 0.0f;
 bool toggleImage = false;
-bool playerHitBomb = false;
+bool firstFrame = true;
 
 void WaitTimer(float seconds) {
     float startTime = GetTime();
@@ -68,6 +68,7 @@ void playpaint() {
     p2s = LoadTexture("pic/p2stunned.png");
     bg = LoadTexture("pic/bg.png");
     score_bg = LoadTexture("pic/score5.png");
+    ground = LoadTexture("pic/ground.jpg");
     b1 = LoadTexture("pic/banana.png");
     b2 = LoadTexture("pic/banana3.png");
     p1w = LoadTexture("pic/p1win.png");
@@ -80,13 +81,14 @@ void playpaint() {
     Player player1 = {0, 0, BLUE, 0, 0};
     Player player2 = {cols - 1, rows - 1, RED, 0, 0};
     
-    vector<vector<Color>> grid(rows, vector<Color>(cols, BROWN));
+    vector<vector<Color>> grid(rows, vector<Color>(cols, {255, 255, 255, 0}));
     
     float timer = gameTime;
     bool gameRunning = true;
     
     while (!WindowShouldClose() && gameRunning) {
         if(!gameover){
+            firstFrame = false;
             float GetTime = GetFrameTime();
             if (timer > 0) timer -= GetTime;
             else {
@@ -189,21 +191,22 @@ void playpaint() {
         if(!gameover){
         
         DrawTextureEx(bg, (Vector2){0, 0}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(ground, (Vector2){fieldX, fieldY}, 0.0f, 0.127f, WHITE);
         DrawTextureEx(score_bg, (Vector2){25, 48}, 0.0f, 1.0f, WHITE);
         DrawTextureEx(score_bg, (Vector2){915, 45}, 0.0f, 1.05f, WHITE);
 
         // ชื่อเกม
         DrawText("Paint the Colors", 388, 30, 50, WHITE);
 
-        // วาดสนามแข่ง
-        DrawRectangleLinesEx((Rectangle){fieldX, fieldY, fieldSize, fieldSize}, 2, BLACK);
         // วาดกริดสี
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 DrawRectangle(fieldX + c * gridSize, fieldY + r * gridSize, gridSize, gridSize, grid[r][c]);
             }
         }
-                
+        // วาดขอบสนามแข่ง
+        DrawRectangleLinesEx((Rectangle){fieldX, fieldY, fieldSize, fieldSize}, 2, BLACK);  
+
         // วาดระเบิด
         Texture2D bomb_texture;
         bomb_texture = toggleImage ? b1 : b2;
@@ -224,6 +227,7 @@ void playpaint() {
         }else{
             UnloadTexture(score_bg);
             UnloadTexture(bg);
+            UnloadTexture(ground);
             if(player1.score > player2.score){
                 DrawText(TextFormat("Player 1 Win!"), 392, 100, 70, BLUE);
                 DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
