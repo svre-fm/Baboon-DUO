@@ -3,6 +3,5 @@
     {
         bool rungame = false;
     };
-    
     void playObstacleRush();
     void playMenU();

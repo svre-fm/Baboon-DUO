@@ -18,7 +18,6 @@ void playObstacleRush()
 
     float car1_width = 20, car1_height = 50; 
     float car2_width = 20, car2_height = 50;
-    
     float car1_x = Bounce_screen + 60;
     float car1_y = MAP_HEIGHT - car1_height - Bounce_screen;
     float car2_x = Bounce_screen + 150; 
