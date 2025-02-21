@@ -16,9 +16,6 @@ public:
     void unload();
     void drawBackground(Rectangle backRec,float scale) const;
     void drawCar(int carNumber, Rectangle carRec, float rotation, float scale) const;
-    void drawObject(int carObject, Rectangle objectRec, float rotation, float scale) const;
-    void drawLine(Rectangle lineRec[], float scale) const;
-    void drawObstacle(Rectangle ObstacleRec,float rotation,float scale) const;
 };
 
 DRAW::DRAW() {
@@ -31,10 +28,10 @@ DRAW::~DRAW() {
 
 void DRAW::load()
 {
-    car1 = LoadTexture("graphics/Car_1.png");
-    car2 = LoadTexture("graphics/Car_2.png");
-    tree = LoadTexture("graphics/Tree2.png");
-    background = LoadTexture("graphics/background1.png");
+    car1 = LoadTexture("pic/obstacle/Car_1.png");
+    car2 = LoadTexture("pic/obstacle/Car_2.png");
+    tree = LoadTexture("pic/obstacle/Tree2.png");
+    background = LoadTexture("pic/obstacle/background1.png");
 }
 
 void DRAW::unload() 

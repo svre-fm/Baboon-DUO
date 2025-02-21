@@ -50,14 +50,6 @@ struct Position {
     Vector2 opposite = {580,163};
 };
 
-struct texture {
-    Texture2D bg = LoadTexture("pic/bggame.png");
-    Texture2D Incorrect = LoadTexture("pic/Incorrect.png");
-    Texture2D correct = LoadTexture("pic/correct.png");
-    Texture2D P1 = LoadTexture("pic/markP1.png");
-    Texture2D P2 = LoadTexture("pic/markP2.png");
-    Texture2D borad = LoadTexture("pic/borad.png");
-};
 
 inline void generateCommand(GameState& state) {
     state.txttime = 3.0f;

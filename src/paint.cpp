@@ -1,12 +1,15 @@
 #include <iostream>
 #include <raylib.h>
 #include "paint.h"
+#include "style.h"
+#include "countdown.h"
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
 
 using namespace std;
 
+bool gamestart = false;
 bool gameover = false;
 const int screenWidth = 1200;
 const int screenHeight = 800;
@@ -19,7 +22,9 @@ const int moveDelay = 4;
 const int captureSize = 2; // ขนาดพื้นที่กินสี
 const float endGameDelay = 8.0f;
 const float bombDuration = 5.0f;
+float wait = 1.5f;
 Texture2D p1, p2, p1s, p2s, bg, score_bg, ground, b1, b2, b3, p1w, p2w, draw;
+Countdown countdown = Countdown(3.0f);
 
 // ตำแหน่งสนาม
 const int fieldX = (screenWidth - fieldSize) / 2;
@@ -60,22 +65,21 @@ bool p2hitbomb(int px, int py, int bx, int by) {
 }
 
 void playpaint() {
-    InitWindow(screenWidth, screenHeight, "Paint the Colors");
 
-    p1 = LoadTexture("pic/p1.png");
-    p2 = LoadTexture("pic/p2.png");
-    p1s = LoadTexture("pic/p1stunned.png");
-    p2s = LoadTexture("pic/p2stunned.png");
-    bg = LoadTexture("pic/bg.png");
-    score_bg = LoadTexture("pic/score5.png");
-    ground = LoadTexture("pic/ground.jpg");
-    b1 = LoadTexture("pic/banana.png");
-    b2 = LoadTexture("pic/banana3.png");
-    p1w = LoadTexture("pic/p1win.png");
-    p2w = LoadTexture("pic/p2win.png");
-    draw = LoadTexture("pic/draw.png");
+    p1 = LoadTexture("pic/paint/p1.png");
+    p2 = LoadTexture("pic/paint/p2.png");
+    p1s = LoadTexture("pic/paint/p1stunned.png");
+    p2s = LoadTexture("pic/paint/p2stunned.png");
+    bg = LoadTexture("pic/paint/bg.png");
+    score_bg = LoadTexture("pic/paint/score5.png");
+    ground = LoadTexture("pic/paint/ground.jpg");
+    b1 = LoadTexture("pic/paint/banana.png");
+    b2 = LoadTexture("pic/paint/banana3.png");
+    p1w = LoadTexture("pic/result/P1win.png");
+    p2w = LoadTexture("pic/result/P2win.png");
+    draw = LoadTexture("pic/result/Draw.png");
 
-    SetTargetFPS(60);
+    style style;
 
     // พื้นที่กินสี
     Player player1 = {0, 0, BLUE, 0, 0};
@@ -87,12 +91,19 @@ void playpaint() {
     bool gameRunning = true;
     
     while (!WindowShouldClose() && gameRunning) {
-        if(!gameover){
+        if(!gamestart){
+            countdown.update(GetFrameTime());
+            if (countdown.isFinished()) {
+                wait -= GetFrameTime();
+                if(wait <= 0){
+                    gamestart = true;
+                }
+            }
+        }else if(!gameover){
             firstFrame = false;
             float GetTime = GetFrameTime();
             if (timer > 0) timer -= GetTime;
             else {
-                gameRunning = false;
                 gameover = true;
             }
 
@@ -187,17 +198,19 @@ void playpaint() {
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        
-        if(!gameover){
-        
+
         DrawTextureEx(bg, (Vector2){0, 0}, 0.0f, 1.0f, WHITE);
         DrawTextureEx(ground, (Vector2){fieldX, fieldY}, 0.0f, 0.127f, WHITE);
-        DrawTextureEx(score_bg, (Vector2){25, 48}, 0.0f, 1.0f, WHITE);
-        DrawTextureEx(score_bg, (Vector2){915, 45}, 0.0f, 1.05f, WHITE);
+        DrawTextureEx(score_bg, (Vector2){915, 45}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(score_bg, (Vector2){25, 48}, 0.0f, 1.05f, WHITE);
 
         // ชื่อเกม
         DrawText("Paint the Colors", 388, 30, 50, WHITE);
 
+        if(!gamestart){
+            string displaytext = countdown.getDisplayText();
+            style.centerXY(displaytext, 100, WHITE);
+        }else if(!gameover){
         // วาดกริดสี
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -221,33 +234,40 @@ void playpaint() {
         DrawTextureEx(player2_texture, (Vector2){(float)(fieldX + player2.x * gridSize - 55), (float)(fieldY + player2.y * gridSize - 28)}, 0.0f, 0.4f, WHITE);
 
         // แสดงคะแนนเรียลไทม์
-        DrawText(TextFormat("Player 1: %d", player1.score), 60, 90, 30, BLUE);
-        DrawText(TextFormat("Player 2: %d", player2.score), 950, 90, 30, RED);
+        DrawText(TextFormat("Player 1: %d", player1.score), 950, 90, 30, BLUE);
+        DrawText(TextFormat("Player 2: %d", player2.score), 60, 90, 30, RED);
         DrawText(TextFormat("Time: %.1f", timer), 530, 100, 30, WHITE);
         }else{
             UnloadTexture(score_bg);
-            UnloadTexture(bg);
-            UnloadTexture(ground);
-            if(player1.score > player2.score){
-                DrawText(TextFormat("Player 1 Win!"), 392, 100, 70, BLUE);
-                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
-                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
-            }else if(player2.score > player1.score){
-                DrawText(TextFormat("Player 2 Win!"), 392, 100, 70, RED);
-                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
-                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
-            }else if(player1.score == player2.score){
-                DrawText(TextFormat("Draw!"), 480, 100, 70, WHITE);
-                DrawText(TextFormat("Player 1: %d", player1.score), 120, 300, 30, BLUE);
-                DrawText(TextFormat("Player 2: %d", player2.score), 850, 300, 30, RED);
-            }  
+    
+            const char* scoreP2 = TextFormat("%d", player1.score);
+            const char* scoreP1 = TextFormat("%d", player2.score);
+            if (player2.score > player1.score) {
+                DrawTexture(p1w, 0, 0, WHITE);
+                style.centerX("Player 1 win", 100, 110, DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+            } else if (player1.score > player2.score) {
+                DrawTexture(p2w, 0, 0, WHITE);
+                style.centerX("Player 2 win", 100, 110, DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+            } else if (player2.score == player1.score) {
+                DrawTexture(draw, 0, 0, WHITE);
+                style.centerX("Draw", 150, 110, DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+            }
         }
         
         EndDrawing();
-    }
-    
-    WaitTimer(endGameDelay);
 
+        if (WindowShouldClose()) {
+            break; 
+        }
+    }
+    UnloadTexture(bg);
+    UnloadTexture(ground);
     UnloadTexture(p1);
     UnloadTexture(p1s);
     UnloadTexture(p2);
@@ -255,5 +275,5 @@ void playpaint() {
     UnloadTexture(b1);
     UnloadTexture(b2);
 
-    CloseWindow();
+
 }

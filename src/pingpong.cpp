@@ -29,7 +29,7 @@ banana::~banana(){
 }
 
 void banana::load(){
-    pic = LoadTexture("graphic/banana.png");
+    pic = LoadTexture("pic/pingpong/banana.png");
 }
 
 void banana::unload(){
