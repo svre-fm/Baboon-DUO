@@ -135,3 +135,19 @@ class result{
         Texture2D P2win;
         Texture2D Draw;
 };
+
+class texture{
+    public:
+        texture();
+        ~texture();
+        void load();
+        void unload();
+        void drawbg(float x,float y);
+        void drawP1(float x,float y);
+        void drawP2(float x,float y);
+
+    private:
+        Texture2D bg;
+        Texture2D P1;
+        Texture2D P2;
+};

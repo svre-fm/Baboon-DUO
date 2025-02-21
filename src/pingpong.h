@@ -3,8 +3,6 @@
 #ifndef PINGPONG_H
 #define PINGPONG_H
 
-#include <raylib.h>
-
 // Color definitions
 extern Color Green;
 extern Color Dark_Green;

@@ -5,7 +5,7 @@
 #include "paint.h"
 #include "pingpong.h"
 #include "ObstacleRush.h"
-#include "tutorial_CM.h"
+#include "tutorial.h"
 
 using namespace std;
 
@@ -28,35 +28,35 @@ int main() {
 
             if (IsKeyPressed(KEY_ONE)) {
                 bool Ready = false;
-                showtutorial(Ready);
+                showtutorial_CM(Ready);
                 if(Ready){
                     playcommand();
                 }
             }
             if (IsKeyPressed(KEY_TWO)) {
                 bool Ready = false;
-                showtutorial(Ready);
+                showtutorial_PP(Ready);
                 if(Ready){
                     playpingpong();
                 }
             }
             if (IsKeyPressed(KEY_THREE)) {
                 bool Ready = false;
-                showtutorial(Ready);
+                showtutorial_PC(Ready);
                 if(Ready){
                     playpaint();
                 }
             }
             if (IsKeyPressed(KEY_FOUR)) {
                 bool Ready = false;
-                showtutorial(Ready);
+                showtutorial_OB(Ready);
                 if(Ready){
                     playObstacleRush();
                 }
             }
             if (IsKeyPressed(KEY_FIVE)) {
                 bool Ready = false;
-                showtutorial(Ready);
+                showtutorial_MM(Ready);
                 if(Ready){
                     play.Run();
                 }

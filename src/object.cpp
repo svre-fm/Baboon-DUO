@@ -9,11 +9,11 @@ P1::~P1(){
 }
 
 void P1::load(){
-    p1 = LoadTexture("pic/P1.png");
-    up = LoadTexture("pic/P1up.png");
-    down = LoadTexture("pic/P1down.png");
-    right = LoadTexture("pic/P1right.png");
-    left = LoadTexture("pic/P1left.png");
+    p1 = LoadTexture("pic/command/P1.png");
+    up = LoadTexture("pic/command/P1up.png");
+    down = LoadTexture("pic/command/P1down.png");
+    right = LoadTexture("pic/command/P1right.png");
+    left = LoadTexture("pic/command/P1left.png");
 }
 
 void P1::unload(){
@@ -61,11 +61,11 @@ P2::~P2(){
 }
 
 void P2::load(){
-    p2 = LoadTexture("pic/P2.png");
-    up = LoadTexture("pic/P2up.png");
-    down = LoadTexture("pic/P2down.png");
-    right = LoadTexture("pic/P2right.png");
-    left = LoadTexture("pic/P2left.png");
+    p2 = LoadTexture("pic/command/P2.png");
+    up = LoadTexture("pic/command/P2up.png");
+    down = LoadTexture("pic/command/P2down.png");
+    right = LoadTexture("pic/command/P2right.png");
+    left = LoadTexture("pic/command/P2left.png");
 }
 
 void P2::unload(){
@@ -113,10 +113,10 @@ command::~command(){
 }
 
 void command::load(){
-    up = LoadTexture("pic/3.png");
-    down = LoadTexture("pic/4.png");
-    right = LoadTexture("pic/1.png");
-    left = LoadTexture("pic/2.png");
+    up = LoadTexture("pic/command/3.png");
+    down = LoadTexture("pic/command/4.png");
+    right = LoadTexture("pic/command/1.png");
+    left = LoadTexture("pic/command/2.png");
 }
 
 void command::unload(){
@@ -160,10 +160,10 @@ oppositecommand::~oppositecommand(){
 }
 
 void oppositecommand::load(){
-    up = LoadTexture("pic/7.png");
-    down = LoadTexture("pic/8.png");
-    right = LoadTexture("pic/5.png");
-    left = LoadTexture("pic/6.png");
+    up = LoadTexture("pic/command/7.png");
+    down = LoadTexture("pic/command/8.png");
+    right = LoadTexture("pic/command/5.png");
+    left = LoadTexture("pic/command/6.png");
 }
 
 void oppositecommand::unload(){
@@ -207,10 +207,10 @@ Commander::~Commander(){
 }
 
 void Commander::load(){
-    C1 = LoadTexture("pic/C1.png");
-    C1attack = LoadTexture("pic/C1Attack.png");
-    C2 = LoadTexture("pic/C2.png");
-    C2attack = LoadTexture("pic/C2Attack.png");
+    C1 = LoadTexture("pic/command/C1.png");
+    C1attack = LoadTexture("pic/command/C1Attack.png");
+    C2 = LoadTexture("pic/command/C2.png");
+    C2attack = LoadTexture("pic/command/C2Attack.png");
 }
 
 void Commander::unload(){
@@ -254,9 +254,9 @@ check::~check(){
 }
 
 void check::load(){
-    incorrect = LoadTexture("pic/Incorrect.png");
-    correct = LoadTexture("pic/correct.png");
-    blank = LoadTexture("pic/blank.png");
+    incorrect = LoadTexture("pic/command/Incorrect.png");
+    correct = LoadTexture("pic/command/correct.png");
+    blank = LoadTexture("pic/command/blank.png");
 }
 
 void check::unload(){
@@ -296,9 +296,9 @@ result::~result(){
 }
 
 void result::load(){
-    P1win = LoadTexture("pic/P1win.png");
-    P2win = LoadTexture("pic/P2win.png");
-    Draw = LoadTexture("pic/Draw.png");
+    P1win = LoadTexture("pic/result/P1win.png");
+    P2win = LoadTexture("pic/result/P2win.png");
+    Draw = LoadTexture("pic/result/Draw.png");
 }
 
 void result::unload(){
@@ -319,4 +319,36 @@ void result::draw(int direction) const {
         DrawTexture(Draw,0,0,WHITE);
     }
 
+}
+
+texture::texture(){
+    load();
+}
+
+texture::~texture(){
+    unload();
+}
+
+void texture::load(){
+    bg = LoadTexture("pic/command/bggame.png");
+    P1 = LoadTexture("pic/command/markP1.png");
+    P2 = LoadTexture("pic/command/markP2.png");
+}
+
+void texture::unload(){
+    UnloadTexture(bg);
+    UnloadTexture(P1);
+    UnloadTexture(P2);
+}
+
+void texture::drawbg(float x, float y){
+    DrawTexture(bg,x,y,WHITE);
+}
+
+void texture::drawP1(float x, float y){
+    DrawTexture(P1,x,y,WHITE);
+}
+
+void texture::drawP2(float x, float y){
+    DrawTexture(P2,x,y,WHITE);
 }

@@ -4,11 +4,17 @@
 #include "raylib.h"
 #include <vector>
 #include <string>
+#include "countdown.h"
+#include "style.h"
+#include "object.h"
 
 class Memory {
 public:
     Memory();
     void Run();
+    Countdown Cd_gamestart = Countdown(3.0f);
+    bool gamestart = false;
+    bool gameover = false;
 
 private:
     void GenerateNewRound();
@@ -21,6 +27,7 @@ private:
     Texture2D img1, img2, img3, img4, img5, img13, img14;
     Texture2D img6, img7, img8, img9, img10, img11, img12;
     Texture2D imgup, imgdown, imgleft, imgright; // รูปภาพทิศทาง
+    Texture2D P1win, P2win, draw;
 
     int round;
     int player1_score, player2_score;
@@ -41,6 +48,7 @@ private:
     int current_index;
     float timer;
     float display_duration;
+    float wait;
     bool showing_target;
     int countdown;
 

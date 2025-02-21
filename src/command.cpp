@@ -3,8 +3,8 @@
 
 void playcommand() {
     GameState state;
-    Position Position;
     texture texture;
+    Position Position;
     P1 P1;
     P2 P2;
     command command;
@@ -28,7 +28,7 @@ void playcommand() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        DrawTexture(texture.bg,0,0,WHITE);
+        texture.drawbg(0,0);
 
         if (!state.gamestart) {
             state.countdown.update(GetFrameTime());
@@ -74,7 +74,7 @@ void playcommand() {
 
         if (!state.gamestart) {
             string displaytext = state.countdown.getDisplayText();
-            style.centerXY(displaytext, 100, RED);
+            style.centerXY(displaytext, 100, WHITE);
         } else if (state.gameOver) {
             const char* scoreP2 = TextFormat("%d", state.scorep2);
             const char* scoreP1 = TextFormat("%d", state.scorep1);
@@ -126,8 +126,8 @@ void playcommand() {
             const char* scoreTextP1 = TextFormat("Score P1: %d", state.scorep1);
             style.drawTextBox(scoreTextP1, 1000, 22, 30, BLUE, WHITE, BLUE,2);
             style.drawTextBox(scoreTextP2, 35, 22, 30, RED, WHITE, RED,2);
-            DrawTexture(texture.P1,0,-5,WHITE);
-            DrawTexture(texture.P2,0,-5,WHITE);
+            texture.drawP1(0,-5);
+            texture.drawP2(0,-5);
 
         }
         EndDrawing();
@@ -135,4 +135,5 @@ void playcommand() {
             break; 
         }
     }
+
 }
