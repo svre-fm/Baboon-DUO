@@ -66,17 +66,17 @@ void Memory::GenerateNewRound() {
         random_moves[j] = moves[randIndex];
 
         if (random_moves[j] == "up") {
-            correct_p1[j] = 'w';
-            correct_p2[j] = KEY_UP;
+            correct_p2[j] = 'w';
+            correct_p1[j] = KEY_UP;
         } else if (random_moves[j] == "down") {
-            correct_p1[j] = 's';
-            correct_p2[j] = KEY_DOWN;
+            correct_p2[j] = 's';
+            correct_p1[j] = KEY_DOWN;
         } else if (random_moves[j] == "left") {
-            correct_p1[j] = 'a';
-            correct_p2[j] = KEY_LEFT;
+            correct_p2[j] = 'a';
+            correct_p1[j] = KEY_LEFT;
         } else if (random_moves[j] == "right") {
-            correct_p1[j] = 'd';
-            correct_p2[j] = KEY_RIGHT;
+            correct_p2[j] = 'd';
+            correct_p1[j] = KEY_RIGHT;
         }
     }
     
@@ -162,33 +162,33 @@ void Memory::Update() {
             }
         } else if (players_can_type) {
             // โค้ดในการจัดการการกรอกข้อมูลของผู้เล่นเหมือนเดิม
-            if (player1_inputs.size() < 5 && (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_D))) {
+            if (player2_inputs.size() < 5 && (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_S) || IsKeyPressed(KEY_D))) {
                 char input = 0;
                 if (IsKeyPressed(KEY_W)) input = 'w';
                 else if (IsKeyPressed(KEY_A)) input = 'a';
                 else if (IsKeyPressed(KEY_S)) input = 's';
                 else if (IsKeyPressed(KEY_D)) input = 'd';
 
-                int index = player1_inputs.size();
+                int index = player2_inputs.size();
                 if (index < 5) {
-                    player1_inputs.push_back(input);
-                    display_p1[index] = (input == correct_p1[index]) ? 1 : -1;
-                    if (input == correct_p1[index]) correct_count_p1++;
+                    player2_inputs.push_back(input);
+                    display_p2[index] = (input == correct_p2[index]) ? 1 : -1;
+                    if (input == correct_p2[index]) correct_count_p2++;
                 }
             }
 
-            if (player2_inputs.size() < 5 && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT))) {
+            if (player1_inputs.size() < 5 && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT))) {
                 int input = 0;
                 if (IsKeyPressed(KEY_UP)) input = KEY_UP;
                 else if (IsKeyPressed(KEY_LEFT)) input = KEY_LEFT;
                 else if (IsKeyPressed(KEY_DOWN)) input = KEY_DOWN;
                 else if (IsKeyPressed(KEY_RIGHT)) input = KEY_RIGHT;
 
-                int index = player2_inputs.size();
+                int index = player1_inputs.size();
                 if (index < 5) {
-                    player2_inputs.push_back(input);
-                    display_p2[index] = (input == correct_p2[index]) ? 1 : -1;
-                    if (input == correct_p2[index]) correct_count_p2++;
+                    player1_inputs.push_back(input);
+                    display_p1[index] = (input == correct_p1[index]) ? 1 : -1;
+                    if (input == correct_p1[index]) correct_count_p1++;
                 }
             }
 
@@ -239,16 +239,16 @@ void Memory::Draw() {
             return;
         }
 
-        DrawTexture(player1Image, 100, 500 - jump, WHITE);
-        DrawTexture(player2Image, 800, 500 - jump, WHITE);
+        DrawTexture(player1Image, 800, 500 - jump, WHITE);
+        DrawTexture(player2Image, 100, 500 - jump, WHITE);
 
         DrawText(TextFormat("Round: %d", round), 480, 160, 50, BLACK);
 
-        DrawTextureEx(img10, (Vector2){150, 30}, 0.0f, 0.5f, WHITE);
-        DrawTextureEx(img11, (Vector2){870, 30}, 0.0f, 0.5f, WHITE);
+        DrawTextureEx(img10, (Vector2){870, 30}, 0.0f, 0.5f, WHITE);
+        DrawTextureEx(img11, (Vector2){150, 30}, 0.0f, 0.5f, WHITE);
 
-        DrawText(TextFormat("%d", player1_score), 210, 200, 30, BLUE);
-        DrawText(TextFormat("%d", player2_score), 930, 200, 30, RED);
+        DrawText(TextFormat("%d", player1_score), 930, 200, 30, BLUE);
+        DrawText(TextFormat("%d", player2_score), 210, 200, 30, RED);
 
         if (showing_target && current_index < 5) {
             if (timer <= 1.0f) {  // แสดงภาพ 1.5 วินาที
@@ -269,10 +269,10 @@ void Memory::Draw() {
             DrawText(TextFormat("%d", countdown), screenWidth / 2 - 25, screenHeight / 2 + 85, 60, BLACK);
         }
         for (int i = 0; i < 5; i++) {
-            DrawTexture((display_p1[i] == 0) ? img3 : (display_p1[i] == 1) ? img4 : img5, 100 + (i * 60), 400, WHITE);
+            DrawTexture((display_p1[i] == 0) ? img3 : (display_p1[i] == 1) ? img4 : img5, 800 + (i * 60), 400, WHITE);
         }
         for (int i = 0; i < 5; i++) {
-            DrawTexture((display_p2[i] == 0) ? img3 : (display_p2[i] == 1) ? img4 : img5, 800 + (i * 60), 400, WHITE);
+            DrawTexture((display_p2[i] == 0) ? img3 : (display_p2[i] == 1) ? img4 : img5, 100 + (i * 60), 400, WHITE);
         }
     }
     EndDrawing();
