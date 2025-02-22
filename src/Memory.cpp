@@ -17,7 +17,7 @@ Memory::Memory() {
     img13 = LoadTexture("pic/memory/obj1.png");
     img14 = LoadTexture("pic/memory/obj2.png");
 
-    imgup = LoadTexture("pic/memory/up.png");      // รูป up
+    imgup = LoadTexture("pic/memory/1.png");      // รูป up
     imgleft = LoadTexture("pic/memory/left.png");  // รูป left
     imgdown = LoadTexture("pic/memory/down.png");  // รูป down
     imgright = LoadTexture("pic/memory/right.png"); // รูป right
@@ -26,7 +26,6 @@ Memory::Memory() {
     P2win = LoadTexture("pic/result/P2win.png");
     draw = LoadTexture("pic/result/Draw.png");
 
-    SetTargetFPS(60);
     srand(time(0));
 
     round = 1;
@@ -253,13 +252,13 @@ void Memory::Draw() {
         if (showing_target && current_index < 5) {
             if (timer <= 1.0f) {  // แสดงภาพ 1.5 วินาที
                 if (random_moves[current_index] == "up") {
-                    DrawTextureEx(imgup, (Vector2){screenWidth / 2 - 35, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+                    DrawTextureEx(imgup, (Vector2){-17,52.6}, 0.0f, 1.0f, WHITE);
                 } else if (random_moves[current_index] == "down") {
-                    DrawTextureEx(imgdown, (Vector2){screenWidth / 2 - 40, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+                    DrawTextureEx(imgdown, (Vector2){-17,52.6}, 0.0f, 1.0f, WHITE);
                 } else if (random_moves[current_index] == "left") {
-                    DrawTextureEx(imgleft, (Vector2){screenWidth / 2 - 48, screenHeight / 2 + 92}, 0.0f, 0.35f, WHITE);
+                    DrawTextureEx(imgleft, (Vector2){-17,52.6}, 0.0f, 1.0f, WHITE);
                 } else if (random_moves[current_index] == "right") {
-                    DrawTextureEx(imgright, (Vector2){screenWidth / 2 - 48, screenHeight / 2 + 85}, 0.0f, 0.35f, WHITE);
+                    DrawTextureEx(imgright, (Vector2){-17,52.6}, 0.0f, 1.0f, WHITE);
                 }
             }
             // ถ้า timer > 1.5s (ช่วง 0.5 วินาทีสุดท้าย) → ไม่ต้องวาดอะไรเลย
