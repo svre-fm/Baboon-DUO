@@ -140,8 +140,6 @@ void Memory::Update() {
             // player2Image = img11;
         //}
 
-
-
         if (showing_target) {
             if (timer >= 1.5f) {  // ครบ 2 วินาที (1.5s แสดง + 0.5s ซ่อน)
                 timer = 0;

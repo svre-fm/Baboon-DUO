@@ -25,9 +25,9 @@ void showMenu()
                                 SCREEN_HEIGHT / 2 + 50, 
                                 baseWidth * scale, 
                                 baseHeight * scale };
-
-        BeginDrawing();
+        
         ClearBackground(RAYWHITE);
+        BeginDrawing();
         
         if(!gamestart)
         {
@@ -35,10 +35,10 @@ void showMenu()
             if (isHover) {
                 scale = 1.0f; // ขยายขนาดปุ่ม
                 if (increasing) {
-                    rotation += 1.0f;
+                    rotation += 0.80f;
                     if (rotation >= 10) increasing = false;
                 } else {
-                    rotation -= 1.0f;
+                    rotation -= 0.80f;
                     if (rotation <= -10) increasing = true;
                 }
             } else {
@@ -50,12 +50,14 @@ void showMenu()
             // ตรวจสอบการคลิกปุ่ม
             if (isHover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                break; // ปิดเมนูเพื่อไปที่หน้าเกม
+                ClearBackground(RAYWHITE); // ปิดเมนูเพื่อไปที่หน้าเกม
+                EndDrawing();
+                gamestart = true;
             }
 
             Rectangle sourceRec = { 0, 0, (float)startButtonTexture.width, (float)startButtonTexture.height };
             Rectangle destRec = { buttonRec.x , buttonRec.y, buttonRec.width, buttonRec.height };
-            Vector2 origin = { 0, 0 };
+            Vector2 origin = { 0, 0};
             
             DrawTexture(backgraoundTexture,0,0,WHITE);
             DrawTexturePro(startButtonTexture, sourceRec, destRec, origin, rotation, WHITE);
@@ -65,10 +67,40 @@ void showMenu()
         {
             if (WindowShouldClose()) {
                 ClearBackground(RAYWHITE);
-                break; 
             }
         }
     }
 
+    CloseWindow(); 
+}
+
+void EndgameScore()
+{
+    Texture2D player1winTexture = LoadTexture("pic/menu/final(1)win.png");
+    Texture2D player2winTexture = LoadTexture("pic/menu/final(2)win.png");
+    Texture2D playerDraw = LoadTexture("pic/menu/finalDraw.png");
+    
+    bool gamestart = false;
+    bool game_over = false;
+    while (!WindowShouldClose())
+    {  
+        if(!gamestart){
+            ClearBackground(RAYWHITE);
+            BeginDrawing();
+    
+            int player_score[2] = {2, 1};
+    
+            if(player_score[0] > player_score[1]) DrawTexture(player1winTexture,0,0,WHITE);
+            else if(player_score[0] < player_score[1]) DrawTexture(player2winTexture,0,0,WHITE);
+            else DrawTexture(playerDraw,0,0,WHITE);
+    
+            EndDrawing();
+        }else if(!game_over){
+            if (WindowShouldClose()) {
+                ClearBackground(RAYWHITE);
+            }
+        }
+
+    }
     CloseWindow(); 
 }
