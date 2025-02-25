@@ -55,7 +55,7 @@ void playObstacleRush()
                 {920, 0, 28, 556},
 
                 {150,90,50,50},
-                {500,700,30,30}
+                {500,680,30,30}
             };
 
         int num_obstacles = sizeof(obstacles) / sizeof(obstacles[0]);
@@ -178,11 +178,11 @@ void playObstacleRush()
         DrawObject.drawCar(1, car1_rec, car1_rotation, 0.08);
         DrawObject.drawCar(2, car2_rec, car2_rotation, 0.08);
         }
-        /*วาด obstacles ดูว่าสอดคล้องกับ รูปหรือไหม
+        //วาด obstacles ดูว่าสอดคล้องกับ รูปหรือไหม
         for (int i = 0; i < num_obstacles; i++) {
             DrawRectangleRec(obstacles[i], GRAY);
         }
-        */
+        
         
         if (game_over) {
             if (P1win) {

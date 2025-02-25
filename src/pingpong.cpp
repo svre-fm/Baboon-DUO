@@ -1,20 +1,23 @@
 #include <raylib.h>
 #include <iostream>
 #include "pingpong.h"
+#include "object.h"
+#include "style.h"
 
 // Color definitions
 Color Green = Color{38, 185, 154, 255};
 Color Dark_Green = Color{20, 160, 133, 255};
 Color Light_Green = Color{129, 204, 184, 255};
 Color Yellow = Color{243, 213, 91, 255};
+Color brown = Color{139,69,19,255};
 
 // Screen dimensions
 const int screen_width = 1200;
 const int screen_height = 800;
 
 // Game state variables
-int player_score = 0;
-int cpu_score = 0;
+int P1score = 0;
+int P2score = 0;
 bool game_over = false;
 
 
@@ -37,7 +40,7 @@ void banana::unload(){
 }
 
 void banana::drawbanana(){
-    DrawTextureEx(pic,{x - pic.width / 2, y - pic.height / 2,},0.0f,1.0f,WHITE);
+    DrawTextureEx(pic,{x - pic.width / 2, y - pic.height / 2,},0.0f,1.5f,WHITE);
 }
 
 void banana::Update() {
@@ -50,13 +53,13 @@ void banana::Update() {
         speed_y *= -1;
     }
 
-    if (x + pic.width / 2 >= GetScreenWidth()) {  // ตรวจสอบขอบขวา
-        cpu_score++;
+    if (x + pic.width / 2 >= GetScreenWidth()) {  
+        P2score++;
         ResetBall();
     }
     
-    if (x - pic.width / 2 <= 0) {  // ตรวจสอบขอบซ้าย
-        player_score++;
+    if (x - pic.width / 2 <= 0) {
+        P1score++;
         ResetBall();
     }
     
@@ -82,7 +85,7 @@ void Paddle::LimitMovement() {
 }
 
 void Paddle::Draw() {
-    DrawRectangleRounded(Rectangle{x, y, width, height}, 0.8, 0, WHITE);
+    DrawRectangleRounded(Rectangle{x, y, width, height}, 0.8, 0, brown);
 }
 
 void Paddle::Update() {}
@@ -115,30 +118,29 @@ void Player2Paddle::Update() {
 
 // Main game function
 void playpingpong() {
-    std::cout << "Starting the game" << std::endl;
-
-    InitWindow(screen_width, screen_height, "2 Player Pong Game!");
-    SetTargetFPS(60);
+    result result;
+    style style;
+    Texture2D bg = LoadTexture("pic/pingpong/bg.png");
 
     banana ball;
     ball.x = screen_width / 2;
     ball.y = screen_height / 2;
-    ball.speed_x = 7;
-    ball.speed_y = 7;
+    ball.speed_x = 10;
+    ball.speed_y = 10;
 
     Player1Paddle player1;
-    player1.width = 25;
+    player1.width = 20;
     player1.height = 200;
     player1.x = screen_width - player1.width - 10;
     player1.y = screen_height / 2 - player1.height / 2;
-    player1.speed = 8;
+    player1.speed = 10;
 
     Player2Paddle player2;
-    player2.width = 25;
+    player2.width = 20;
     player2.height = 200;
     player2.x = 10;
     player2.y = screen_height / 2 - player2.height / 2;
-    player2.speed = 8;
+    player2.speed = 10;
 
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -150,40 +152,66 @@ void playpingpong() {
 
         // ตรวจจับการชนกับ Player 1
         if (CheckCollisionRecs(ballRect, {player1.x, player1.y, player1.width, player1.height})) {
-            ball.speed_x *= -1;
-            ball.x = player1.x - ball.pic.width / 2 - 1;  // ป้องกันลูกบอลติดในแพดเดิล
+            ball.speed_x *= -1.3f;
+            ball.speed_y *= 1.3f;  // เปลี่ยนทิศทางลูกบอล
+            ball.x = player1.x - ball.pic.width / 2 - 1;  // ปรับตำแหน่งลูกบอลให้อยู่ด้านซ้ายของ Paddle 1
+
+            if (abs(ball.speed_x) > ball.max_speed) ball.speed_x = ball.max_speed * (ball.speed_x > 0 ? 1 : -1);
+            if (abs(ball.speed_y) > ball.max_speed) ball.speed_y = ball.max_speed * (ball.speed_y > 0 ? 1 : -1);
+
         }
         
         // ตรวจจับการชนกับ Player 2
         if (CheckCollisionRecs(ballRect, {player2.x, player2.y, player2.width, player2.height})) {
-            ball.speed_x *= -1;
-            ball.x = player2.x + player2.width + ball.pic.width / 2 + 1;  // ป้องกันลูกบอลติดในแพดเดิล
-        }        
+            ball.speed_x *= -1.3f;  // เพิ่มความเร็ว 10%
+            ball.speed_y *= 1.3f;   // เพิ่มความเร็ว 10%
+            ball.x = player2.x + player2.width + ball.pic.width / 2 + 1;  // ปรับตำแหน่งลูกบอลให้อยู่ด้านขวาของ Paddle 2
 
-        if (player_score == 3 || cpu_score == 3) {
+            // จำกัดความเร็วไม่ให้เกิน max_speed
+            if (abs(ball.speed_x) > ball.max_speed) ball.speed_x = ball.max_speed * (ball.speed_x > 0 ? 1 : -1);
+            if (abs(ball.speed_y) > ball.max_speed) ball.speed_y = ball.max_speed * (ball.speed_y > 0 ? 1 : -1);
+        }         
+
+        if (P1score == 3 || P2score == 3) {
             game_over = true;
         }
     
 
-        ClearBackground(Dark_Green);
+    DrawTexture(bg,0,0,WHITE);
 
-        if (!game_over) {
-            DrawRectangle(screen_width / 2, 0, screen_width / 2, screen_height, Green);
-            DrawCircle(screen_width / 2, screen_height / 2, 150, Light_Green);
-            DrawLine(screen_width / 2, 0, screen_width / 2, screen_height, WHITE);
-            ball.drawbanana();
-            player1.Draw();
-            player2.Draw();
-            DrawText(TextFormat("%i", cpu_score), screen_width / 4 - 20, 20, 80, WHITE);
-            DrawText(TextFormat("%i", player_score), 3 * screen_width / 4 - 20, 20, 80, WHITE);
+    if (!game_over) {
+        ball.drawbanana();
+        player1.Draw();
+        player2.Draw();
+        DrawText(TextFormat("%i", P2score), screen_width / 4 - 20, 20, 80, WHITE);
+        DrawText(TextFormat("%i", P1score), 3 * screen_width / 4 - 20, 20, 80, WHITE);
         } else {
-            ClearBackground(WHITE);
-            const char* text = (player_score == 3) ? "Player 1 Wins!" : "Player 2 Wins!";
-            int textWidth = MeasureText(text, 80);
-            DrawText(text, (screen_width - textWidth) / 2, screen_height / 2 - 40, 80, (player_score == 3) ? RED : BLUE);
+            const char* scoreP1 = TextFormat("%i", P1score);
+            const char* scoreP2 = TextFormat("%i", P2score);
+            if (P1score > P2score) {
+                result.draw(0);
+                style.centerX("Player 1 win", 100, 110, DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
+            } else if (P2score > P1score) {
+                result.draw(1);
+                style.centerX("Player 2 win", 100, 110, DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
+            } else if (P1score == P2score) {
+                result.draw(2);
+                style.centerX("Draw", 150, 110, DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
+            }
         }
 
         EndDrawing();
+
+        if (WindowShouldClose()) {
+            break; 
+        }
+
     }
-    CloseWindow();
+    UnloadTexture(bg);
 }
