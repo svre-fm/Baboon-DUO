@@ -32,11 +32,11 @@ private:
     int round;
     int player1_score, player2_score;
     std::vector<std::string> random_moves;
-    std::vector<char> correct_p1;
-    std::vector<int> correct_p2;
+    std::vector<int> correct_p1;
+    std::vector<char> correct_p2;
 
-    std::vector<char> player1_inputs;
-    std::vector<int> player2_inputs;
+    std::vector<int> player1_inputs;
+    std::vector<char> player2_inputs;
 
     std::vector<int> display_p1;
     std::vector<int> display_p2;
