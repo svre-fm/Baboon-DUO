@@ -84,7 +84,7 @@ void playpaint() {
     // พื้นที่กินสี
     Player player1 = {cols - 1, rows - 1, BLUE, 0, 0};
     Player player2 = {0, 0, RED, 0, 0};
-    
+
     vector<vector<Color>> grid(rows, vector<Color>(cols, {255, 255, 255, 0}));
     
     float timer = gameTime;
@@ -245,18 +245,18 @@ void playpaint() {
             if (player1.score > player2.score) {
                 DrawTexture(p1w, 0, 0, WHITE);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
-                DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
             } else if (player2.score > player1.score) {
                 DrawTexture(p2w, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
-                DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
             } else if (player2.score == player1.score) {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP1,385,620,50,DARKBROWN);
-                DrawText(scoreP2,760,620,50,DARKBROWN);
+                DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP1,760,620,50,DARKBROWN);
             }
         }
         
