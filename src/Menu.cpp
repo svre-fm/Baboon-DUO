@@ -104,3 +104,28 @@ void EndgameScore()
     }
     CloseWindow(); 
 }
+
+void score()
+{
+    Texture2D scoreTexture = LoadTexture("pic/menu/scoreboard.png");
+    
+    bool gamestart = false;
+    bool game_over = false;
+    while (!WindowShouldClose())
+    {  
+        if(!gamestart){
+            ClearBackground(RAYWHITE);
+            BeginDrawing();
+ 
+            //วาด scoreboard
+            DrawTexture(scoreTexture,0,0,WHITE);
+            EndDrawing();
+        }else if(!game_over){
+            if (WindowShouldClose()) {
+                ClearBackground(RAYWHITE);
+            }
+        }
+
+    }
+    CloseWindow();
+}
