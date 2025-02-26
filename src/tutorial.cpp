@@ -2,11 +2,19 @@
 
 class page{
     public:
-        
+        Vector2 mousePos = GetMousePosition();
         bool P1press = false;
         bool P2press = false;
         double waittime = -1.0;
-
+        bool showFirstImage = true;
+        float swapInterval = 0.5f;
+        float timer = 0.0f;
+        Color transparent = {255, 255, 255, 0};
+        Rectangle BTleft = {45, 400, 107, 53};
+        Rectangle BTright = {1045, 400, 107, 53};
+        Rectangle BTleft_up = {30, 390, 138, 68};
+        Rectangle BTright_up = {1030, 390, 138, 68};
+        
         page();
         ~page();
         void load();
@@ -22,6 +30,7 @@ class page{
         void drawbg_PP();
         void drawbg_PC();
         void drawready(float X,float Y);
+        void drawarrow();
 
     private:
         Texture2D CM_1;
@@ -43,6 +52,7 @@ class page{
         Texture2D bg_PP;
         Texture2D bg_PC;
         Texture2D ready;
+        Texture2D al,ar;
 };
 
 page::page(){
@@ -73,6 +83,8 @@ void page::load(){
     PC_3 = LoadTexture("pic/tutorial/PC_3.png");
     bg_PC = LoadTexture("pic/tutorial/paint.png");
     ready = LoadTexture("pic/tutorial/ready.png");
+    al = LoadTexture("pic/tutorial/leftarrow.png");
+    ar = LoadTexture("pic/tutorial/rightarrow.png");
 }
 
 void page::unload(){
@@ -95,6 +107,8 @@ void page::unload(){
     UnloadTexture(PC_3);
     UnloadTexture(bg_PC);
     UnloadTexture(ready);
+    UnloadTexture(al);
+    UnloadTexture(ar);
 }
 
 void page::drawpage_CM(int direction) const {
@@ -158,6 +172,7 @@ void page::drawpage_OB(int direction) const {
 }
 
 void page::drawpage_PC(int direction) const {
+    
     switch (direction){
     case 0:
         DrawTexture(PC_1,0,0,WHITE);
@@ -172,6 +187,27 @@ void page::drawpage_PC(int direction) const {
     default :
         DrawTexture(PC_1,0,0,WHITE);
     }
+}
+
+void page::drawarrow() {
+ 
+    timer += GetFrameTime();
+        if (timer >= swapInterval) {
+            showFirstImage = !showFirstImage; // สลับภาพ
+            timer = 0.0f;
+        }
+    
+    if (showFirstImage) {
+        DrawTextureEx(al, (Vector2){30, 390}, 0.0f, 1.4f, WHITE);
+        DrawTextureEx(ar, (Vector2){1030, 390}, 0.0f, 1.4f, WHITE);
+        DrawRectangle(45, 400, 107, 53, transparent);
+        DrawRectangle(1045, 400, 107, 53, transparent);
+        } else {
+        DrawTextureEx(al, (Vector2){10, 380}, 0.0f, 1.8f, WHITE);
+        DrawTextureEx(ar, (Vector2){1010, 380}, 0.0f, 1.8f, WHITE);
+        DrawRectangle(30, 390, 138, 68, transparent);
+        DrawRectangle(1030, 390, 138, 68, transparent);
+        }
 }
 
 void page::drawbg_CM(){
@@ -202,20 +238,32 @@ void showtutorial_CM(bool& Ready){
     page tutorial;
     int page = 0;
     while(!WindowShouldClose()){
+        tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
             tutorial.drawbg_CM();
-
-            if(IsKeyPressed(KEY_RIGHT)){
-                page++;
-                if(page > 2) page = 0;
-            }
-            if(IsKeyPressed(KEY_LEFT)){
-                page--;
-                if(page < 0) page = 2;
-            }
-
             tutorial.drawpage_CM(page);
+            tutorial.drawarrow();
+
+            if(tutorial.showFirstImage){
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }else{
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }
 
             if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
             if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
@@ -224,7 +272,8 @@ void showtutorial_CM(bool& Ready){
             if(tutorial.P1press) tutorial.drawready(1006,575);
 
             if (tutorial.P1press && tutorial.P2press) {
-                if (tutorial.waittime < 0) {
+                if (tutorial.waittime < 0)
+                 {
                     tutorial.waittime = GetTime();
                 } else if (GetTime() - tutorial.waittime >= 1.5) {
                     Ready = true;
@@ -234,25 +283,38 @@ void showtutorial_CM(bool& Ready){
     
         EndDrawing();
     }
+    
 }
 void showtutorial_MM(bool& Ready){
     page tutorial;
     int page = 0;
     while(!WindowShouldClose()){
+        tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
             tutorial.drawbg_MM();
-
-            if(IsKeyPressed(KEY_RIGHT)){
-                page++;
-                if(page > 1) page = 0;
-            }
-            if(IsKeyPressed(KEY_LEFT)){
-                page--;
-                if(page < 0) page = 1;
-            }
-
             tutorial.drawpage_MM(page);
+            tutorial.drawarrow();
+
+            if(tutorial.showFirstImage){
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }else{
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }
 
             if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
             if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
@@ -277,20 +339,32 @@ void showtutorial_PP(bool& Ready){
     page tutorial;
     int page = 0;
     while(!WindowShouldClose()){
+        tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
             tutorial.drawbg_PP();
-
-            if(IsKeyPressed(KEY_RIGHT)){
-                page++;
-                if(page > 2) page = 0;
-            }
-            if(IsKeyPressed(KEY_LEFT)){
-                page--;
-                if(page < 0) page = 2;
-            }
-
             tutorial.drawpage_PP(page);
+            tutorial.drawarrow();
+
+            if(tutorial.showFirstImage){
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }else{
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }
 
             if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
             if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
@@ -314,20 +388,32 @@ void showtutorial_OB(bool& Ready){
     page tutorial;
     int page = 0;
     while(!WindowShouldClose()){
+        tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
             tutorial.drawbg_OB();
-
-            if(IsKeyPressed(KEY_RIGHT)){
-                page++;
-                if(page > 1) page = 0;
-            }
-            if(IsKeyPressed(KEY_LEFT)){
-                page--;
-                if(page < 0) page = 1;
-            }
-
             tutorial.drawpage_OB(page);
+            tutorial.drawarrow();
+
+            if(tutorial.showFirstImage){
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }else{
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }
 
             if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
             if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
@@ -351,20 +437,32 @@ void showtutorial_PC(bool& Ready){
     page tutorial;
     int page = 0;
     while(!WindowShouldClose()){
+        tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
             tutorial.drawbg_PC();
-
-            if(IsKeyPressed(KEY_RIGHT)){
-                page++;
-                if(page > 2) page = 0;
-            }
-            if(IsKeyPressed(KEY_LEFT)){
-                page--;
-                if(page < 0) page = 2;
-            }
-
             tutorial.drawpage_PC(page);
+            tutorial.drawarrow();
+
+            if(tutorial.showFirstImage){
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }else{
+                if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    page++;
+                    if(page > 2) page = 0;
+                }
+                if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    page--;
+                    if(page < 0) page = 2;
+                }
+            }
 
             if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
             if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
@@ -384,5 +482,4 @@ void showtutorial_PC(bool& Ready){
         EndDrawing();
     }
 }
-
 

@@ -82,8 +82,8 @@ void playpaint() {
     style style;
 
     // พื้นที่กินสี
-    Player player1 = {0, 0, BLUE, 0, 0};
-    Player player2 = {cols - 1, rows - 1, RED, 0, 0};
+    Player player1 = {cols - 1, rows - 1, BLUE, 0, 0};
+    Player player2 = {0, 0, RED, 0, 0};
     
     vector<vector<Color>> grid(rows, vector<Color>(cols, {255, 255, 255, 0}));
     
