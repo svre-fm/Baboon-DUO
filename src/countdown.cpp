@@ -1,15 +1,17 @@
 #include "countdown.h"
 #include <string>
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 Countdown::Countdown(float duration) 
     : countdownTime(duration), finished(false) {}
 
 void Countdown::update(float deltaTime) {
-    if (deltaTime <= 0) return; // ตรวจสอบค่า deltaTime
     if (countdownTime > 0) {
-        countdownTime = std::max(0.0f, countdownTime - deltaTime); // ป้องกันค่า countdownTime ติดลบ
-        finished = (countdownTime <= 0); // อัปเดตสถานะ finished
+        countdownTime -= deltaTime;
+        finished = false;
     } else {
         finished = true;
     }
@@ -20,17 +22,14 @@ bool Countdown::isFinished() const {
 }
 
 void Countdown::reset(float duration) {
-    if (duration <= 0) {
-        return;
-    }
     countdownTime = duration;
     finished = false;
 }
 
-std::string Countdown::getDisplayText() const {
-    if (countdownTime > 0) {
-        return std::to_string(static_cast<int>(std::ceil(countdownTime))); // แสดงเวลาที่เหลือเป็นจำนวนเต็ม
-    } else {
-        return "Game start!!"; // แสดงข้อความเมื่อนับถอยหลังเสร็จสิ้น
+string Countdown::getDisplayText() const{
+    if(countdownTime > 0){
+        return to_string(static_cast<int>(ceil(countdownTime)));
+    }else{
+        return "Game start!!";
     }
 }
