@@ -1,7 +1,12 @@
 #pragma once
 
-#ifndef PINGPONG_H
-#define PINGPONG_H
+#include <raylib.h>
+#include <iostream>
+#include "object.h"
+#include "style.h"
+#include "countdown.h"
+
+
 
 // Color definitions
 extern Color Green;
@@ -16,7 +21,8 @@ extern const int screen_height;
 // Game state variables
 extern int P1score;
 extern int P2score;
-extern bool game_over; // Flag to check if the game is over
+extern bool game_over;
+extern bool gamestart;
 
 // Ball class
 
@@ -25,7 +31,7 @@ class banana
 public:
     float x, y;
     int speed_x, speed_y;
-    const float max_speed = 15.0f;
+    const float max_speed = 12.0f;
     Texture2D pic;
 
     banana();
@@ -46,8 +52,11 @@ protected:
 public:
     float x, y;
     float width, height;
-    int speed;
+    float speed;
+    Texture2D texture;
 
+    void load(const char* path);
+    void unload();
     void Draw();
     virtual void Update();
 };
@@ -66,22 +75,6 @@ public:
     void Update() override;
 };
 
-class PowerUp{
-    public :
-        float x, y;
-        int type;
-        bool active;
-        float spawnTime;
-        float animationScale;
 
-        PowerUp();
-        ~PowerUp();
-        void Spawn();
-        void Draw();
-        const char* Getname();
-}
-
-// Function to play the pingpong game
 void playpingpong();
 
-#endif // PINGPONG_H

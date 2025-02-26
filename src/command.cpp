@@ -81,18 +81,18 @@ void playcommand() {
             if (state.scorep1 > state.scorep2) {
                 result.draw(0);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
             } else if (state.scorep2 > state.scorep1) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
             } else if (state.scorep1 == state.scorep2) {
                 result.draw(2);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
             }
         } else {
 

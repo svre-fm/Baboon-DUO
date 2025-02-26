@@ -74,6 +74,15 @@ void banana::ResetBall() {
     speed_y = 7 * speed_choices[GetRandomValue(0, 1)];
 }
 
+
+void Paddle::load(const char* path){
+   texture = LoadTexture(path);
+}
+
+void Paddle::unload(){
+    UnloadTexture(texture);
+}
+
 // Paddle class implementation
 void Paddle::LimitMovement() {
     if (y <= 0) {
@@ -85,7 +94,7 @@ void Paddle::LimitMovement() {
 }
 
 void Paddle::Draw() {
-    DrawRectangleRounded(Rectangle{x, y, width, height}, 0.8, 0, brown);
+    DrawTextureEx(texture, {x,y}, 0.0f, 1.0f, WHITE);
 }
 
 void Paddle::Update() {}
@@ -129,15 +138,17 @@ void playpingpong() {
     ball.speed_y = 10;
 
     Player1Paddle player1;
-    player1.width = 20;
-    player1.height = 200;
+    player1.load("pic/pingpong/paddleP1.png");
+    player1.width = player1.texture.width;
+    player1.height = player1.texture.height;
     player1.x = screen_width - player1.width - 10;
     player1.y = screen_height / 2 - player1.height / 2;
     player1.speed = 10;
 
     Player2Paddle player2;
-    player2.width = 20;
-    player2.height = 200;
+    player2.load("pic/pingpong/paddleP2.png");
+    player2.width = player2.texture.width;
+    player2.height = player2.texture.height;
     player2.x = 10;
     player2.y = screen_height / 2 - player2.height / 2;
     player2.speed = 10;
@@ -152,8 +163,8 @@ void playpingpong() {
 
         // ตรวจจับการชนกับ Player 1
         if (CheckCollisionRecs(ballRect, {player1.x, player1.y, player1.width, player1.height})) {
-            ball.speed_x *= -1.3f;
-            ball.speed_y *= 1.3f;  // เปลี่ยนทิศทางลูกบอล
+            ball.speed_x *= -1.4f;
+            ball.speed_y *= 1.4f;  // เปลี่ยนทิศทางลูกบอล
             ball.x = player1.x - ball.pic.width / 2 - 1;  // ปรับตำแหน่งลูกบอลให้อยู่ด้านซ้ายของ Paddle 1
 
             if (abs(ball.speed_x) > ball.max_speed) ball.speed_x = ball.max_speed * (ball.speed_x > 0 ? 1 : -1);
@@ -163,8 +174,8 @@ void playpingpong() {
         
         // ตรวจจับการชนกับ Player 2
         if (CheckCollisionRecs(ballRect, {player2.x, player2.y, player2.width, player2.height})) {
-            ball.speed_x *= -1.3f;  // เพิ่มความเร็ว 10%
-            ball.speed_y *= 1.3f;   // เพิ่มความเร็ว 10%
+            ball.speed_x *= -1.4f;  // เพิ่มความเร็ว 10%
+            ball.speed_y *= 1.4f;   // เพิ่มความเร็ว 10%
             ball.x = player2.x + player2.width + ball.pic.width / 2 + 1;  // ปรับตำแหน่งลูกบอลให้อยู่ด้านขวาของ Paddle 2
 
             // จำกัดความเร็วไม่ให้เกิน max_speed
@@ -191,18 +202,18 @@ void playpingpong() {
             if (P1score > P2score) {
                 result.draw(0);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
             } else if (P2score > P1score) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
             } else if (P1score == P2score) {
                 result.draw(2);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP1,405,620,50,DARKBROWN);
-                DrawText(scoreP2,780,620,50,DARKBROWN);
+                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP2,405,620,50,DARKBROWN);
             }
         }
 
@@ -213,5 +224,7 @@ void playpingpong() {
         }
 
     }
+    player1.unload();
+    player2.unload();
     UnloadTexture(bg);
 }
