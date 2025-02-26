@@ -1,7 +1,12 @@
 #pragma once
 
-#ifndef PINGPONG_H
-#define PINGPONG_H
+#include <raylib.h>
+#include <iostream>
+#include "object.h"
+#include "style.h"
+#include "countdown.h"
+
+
 
 // Color definitions
 extern Color Green;
@@ -14,56 +19,79 @@ extern const int screen_width;
 extern const int screen_height;
 
 // Game state variables
-extern int player_score;
-extern int cpu_score;
-extern bool game_over; // Flag to check if the game is over
-
+extern int P1score;
+extern int P2score;
+extern bool game_over;
+extern bool gamestart;
 
 // Ball class
 
-class banana{
-    public:
-        float x, y;
-        int speed_x, speed_y;
-        Texture2D pic ;
+class banana
+{
+public:
+    float x, y;
+    int speed_x, speed_y;
+    const float max_speed = 12.0f;
+    Texture2D pic;
 
-        banana();
-        ~banana();
-        void load();
-        void unload();
-        void drawbanana();
-        void Update();
-        void ResetBall();
+    banana();
+    ~banana();
+    void load();
+    void unload();
+    void drawbanana();
+    void Update();
+    void ResetBall();
 };
 
 // Paddle class (Base class for both Player and CPU paddles)
-class Paddle {
+class Paddle
+{
 protected:
     void LimitMovement();
 
 public:
     float x, y;
     float width, height;
-    int speed;
+    float speed;
+    Texture2D texture;
 
+    void load(const char* path);
+    void unload();
     void Draw();
     virtual void Update();
 };
 
 // Player1 paddle class
-class Player1Paddle : public Paddle {
+class Player1Paddle : public Paddle
+{
 public:
     void Update() override;
+    void Updateswap() ;
 };
 
 // Player2 paddle class
-class Player2Paddle : public Paddle {
+class Player2Paddle : public Paddle
+{
 public:
     void Update() override;
+    void Updateswap() ;
 };
 
-// Function to play the pingpong game
-void playpingpong();
+class PowerUp{
+public :
+    float x,y;
+    int type;
+    bool active;
+    float spawnTime;
+    Texture2D texture;
 
-#endif // PINGPONG_H
+    PowerUp();
+    void unload();
+    void spawn();
+    void draw();
+    const char* Getname();
+
+};
+
+void playpingpong();
 

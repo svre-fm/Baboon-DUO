@@ -1,7 +1,8 @@
 #include "countdown.h"
-#include <iostream>
 #include <string>
 #include <cmath>
+#include <iostream>
+
 using namespace std;
 
 Countdown::Countdown(float duration) 

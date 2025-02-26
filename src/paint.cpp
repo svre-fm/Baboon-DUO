@@ -250,13 +250,14 @@ void playpaint() {
             } else if (player2.score > player1.score) {
                 DrawTexture(p2w, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
                 DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP1,760,620,50,DARKBROWN);
+
             } else if (player2.score == player1.score) {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP1,385,620,50,DARKBROWN);
-                DrawText(scoreP2,760,620,50,DARKBROWN);
+                DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP1,760,620,50,DARKBROWN);
             }
         }
         
