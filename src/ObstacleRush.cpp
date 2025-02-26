@@ -179,9 +179,9 @@ void playObstacleRush()
         DrawObject.drawCar(2, car2_rec, car2_rotation, 0.08);
         }
         //วาด obstacles ดูว่าสอดคล้องกับ รูปหรือไหม
-        for (int i = 0; i < num_obstacles; i++) {
-            DrawRectangleRec(obstacles[i], GRAY);
-        }
+        // for (int i = 0; i < num_obstacles; i++) {
+        //     DrawRectangleRec(obstacles[i], GRAY);
+        // }
         
         
         if (game_over) {
