@@ -221,18 +221,18 @@ void Memory::Draw() {
             if (player1_score > player2_score) {
                 DrawTexture(P1win, 0, 0, WHITE);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
             } else if (player2_score > player1_score) {
                 DrawTexture(P2win, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
             } else if (player1_score == player2_score) {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP1,405,620,50,DARKBROWN);
+                DrawText(scoreP2,780,620,50,DARKBROWN);
             }
             EndDrawing();
             return;

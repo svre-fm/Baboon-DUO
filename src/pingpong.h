@@ -66,7 +66,6 @@ class Player1Paddle : public Paddle
 {
 public:
     void Update() override;
-    void Updateswap() ;
 };
 
 // Player2 paddle class
@@ -74,24 +73,8 @@ class Player2Paddle : public Paddle
 {
 public:
     void Update() override;
-    void Updateswap() ;
 };
 
-class PowerUp{
-public :
-    float x,y;
-    int type;
-    bool active;
-    float spawnTime;
-    Texture2D texture;
-
-    PowerUp();
-    void unload();
-    void spawn();
-    void draw();
-    const char* Getname();
-
-};
 
 void playpingpong();
 
