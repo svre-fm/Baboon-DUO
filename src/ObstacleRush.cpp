@@ -6,6 +6,7 @@
 #include "countdown.h"
 #include "object.h"
 #include "style.h"
+#include "global.h"
 
 using namespace std;
 
@@ -178,19 +179,24 @@ void playObstacleRush()
         DrawObject.drawCar(1, car1_rec, car1_rotation, 0.08);
         DrawObject.drawCar(2, car2_rec, car2_rotation, 0.08);
         }
-        //วาด obstacles ดูว่าสอดคล้องกับ รูปหรือไหม
-        for (int i = 0; i < num_obstacles; i++) {
-            DrawRectangleRec(obstacles[i], GRAY);
-        }
-        
-        
+    
         if (game_over) {
             if (P1win) {
                 result.draw(0);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
+                addscore(1,1);
+                winsPlayer1[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             } else if (P2win) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
+                addscore(1,1);
+                winsPlayer2[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             }
         }
 
@@ -201,4 +207,5 @@ void playObstacleRush()
         }
 
     }
+    
 }

@@ -1,4 +1,5 @@
 #include "command.h"
+#include "global.h"
 #include <iostream>
 
 void playcommand() {
@@ -83,16 +84,31 @@ void playcommand() {
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
+                addscore(1,1);
+                winsPlayer1[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             } else if (state.scorep2 > state.scorep1) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
+                addscore(2,1);
+                winsPlayer2[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             } else if (state.scorep1 == state.scorep2) {
                 result.draw(2);
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
+                addscore(0,0);
+                winsPlayer1[Round - 1] = 2;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             }
         } else {
 

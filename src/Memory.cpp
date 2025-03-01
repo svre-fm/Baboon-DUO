@@ -1,4 +1,5 @@
 #include "Memory.h"
+#include "global.h"
 #include <bits/stdc++.h>
 
 Memory::Memory() {
@@ -25,6 +26,8 @@ Memory::Memory() {
     P1win = LoadTexture("pic/result/P1win.png");
     P2win = LoadTexture("pic/result/P2win.png");
     draw = LoadTexture("pic/result/Draw.png");
+
+    gameOver = false;
 
     srand(time(0));
 
@@ -105,7 +108,8 @@ void Memory::Update() {
             }
     }else{
         if (round > 5) {  
-            return;  // ถ้าครบ 5 รอบแล้ว ไม่ต้องอัปเดตอะไรอีก
+                return;
+            // ถ้าครบ 5 รอบแล้ว ไม่ต้องอัปเดตอะไรอีก
         }
 
         timer += GetFrameTime();
@@ -211,29 +215,43 @@ void Memory::Draw() {
     DrawTexture(img13, 430, 400, WHITE);
     DrawTexture(img14, 405, -100, WHITE);
 
-    if(!gamestart){
+    if (!gamestart) {
         string displaytext = Cd_gamestart.getDisplayText();
         style.centerXY(displaytext, 100, WHITE);
-    }else{
+    } else {
         if (round > 5) {
             const char* scoreP2 = TextFormat("%d", player2_score);
             const char* scoreP1 = TextFormat("%d", player1_score);
             if (player1_score > player2_score) {
                 DrawTexture(P1win, 0, 0, WHITE);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP2, 405, 620, 50, DARKBROWN);
+                DrawText(scoreP1, 780, 620, 50, DARKBROWN);
+                addscore(1, 1);
+                winsPlayer1[Round - 1] = 1;
             } else if (player2_score > player1_score) {
                 DrawTexture(P2win, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
-            } else if (player1_score == player2_score) {
+                DrawText(scoreP2, 405, 620, 50, DARKBROWN);
+                DrawText(scoreP1, 780, 620, 50, DARKBROWN);
+                addscore(2, 1);
+                winsPlayer2[Round - 1] = 1;
+            } else {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP2,405,620,50,DARKBROWN);
-                DrawText(scoreP1,780,620,50,DARKBROWN);
+                DrawText(scoreP2, 405, 620, 50, DARKBROWN);
+                DrawText(scoreP1, 780, 620, 50, DARKBROWN);
+                addscore(0, 0);
+                winsPlayer1[Round - 1] = 2;
             }
+
+            // ตรวจสอบการกด ENTER เพื่อหยุดเกม
+            if (IsKeyPressed(KEY_ENTER)) {
+                gameOver = true;  // ตั้งสถานะว่าเกมจบแล้ว
+                EndDrawing();
+                return;  // ออกจากฟังก์ชัน Draw()
+            }
+
             EndDrawing();
             return;
         }
@@ -279,12 +297,12 @@ void Memory::Draw() {
 
 void Memory::Run() {
     while (!WindowShouldClose()) {
-        Update();
-        Draw();
-        if (WindowShouldClose()) {
-            break; 
+        if (gameOver) {  // ถ้าเกมจบ, หยุดการทำงานของลูป
+            break;
         }
         
+        Update();  // เรียกฟังก์ชัน Update
+        Draw();    // เรียกฟังก์ชัน Draw
     }
     UnloadTexture(img1);
     UnloadTexture(img2);

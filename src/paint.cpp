@@ -6,6 +6,8 @@
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
+#include "global.h"
+
 
 using namespace std;
 
@@ -201,7 +203,7 @@ void playpaint() {
 
         DrawTextureEx(bg, (Vector2){0, 0}, 0.0f, 1.0f, WHITE);
         DrawTextureEx(ground, (Vector2){fieldX, fieldY}, 0.0f, 0.127f, WHITE);
-        DrawTextureEx(score_bg, (Vector2){915, 45}, 0.0f, 1.0f, WHITE);
+        DrawTextureEx(score_bg, (Vector2){915, 48}, 0.0f, 1.0f, WHITE);
         DrawTextureEx(score_bg, (Vector2){25, 48}, 0.0f, 1.05f, WHITE);
 
         // ชื่อเกม
@@ -230,8 +232,8 @@ void playpaint() {
         Texture2D player2_texture = (player2.stunTime > 0) ? p2s : p2;
 
         // วาดผู้เล่น
-        DrawTextureEx(player1_texture, (Vector2){(float)(fieldX + player1.x * gridSize - 47), (float)(fieldY + player1.y * gridSize - 28)}, 0.0f, 0.4f, WHITE);
-        DrawTextureEx(player2_texture, (Vector2){(float)(fieldX + player2.x * gridSize - 55), (float)(fieldY + player2.y * gridSize - 28)}, 0.0f, 0.4f, WHITE);
+        DrawTextureEx(player1_texture, (Vector2){(float)(fieldX + player1.x * gridSize - 47), (float)(fieldY + player1.y * gridSize - 68)}, 0.0f, 0.4f, WHITE);
+        DrawTextureEx(player2_texture, (Vector2){(float)(fieldX + player2.x * gridSize - 47), (float)(fieldY + player2.y * gridSize - 68)}, 0.0f, 0.4f, WHITE);
 
         // แสดงคะแนนเรียลไทม์
         DrawText(TextFormat("Player 1: %d", player1.score), 950, 90, 30, BLUE);
@@ -245,19 +247,32 @@ void playpaint() {
             if (player1.score > player2.score) {
                 DrawTexture(p1w, 0, 0, WHITE);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
-                DrawText(scoreP2,385,620,50,DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+                addscore(1,1);
+                winsPlayer1[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             } else if (player2.score > player1.score) {
                 DrawTexture(p2w, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                DrawText(scoreP2,385,620,50,DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
-
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+                addscore(2,1);
+                winsPlayer2[Round - 1] = 1;
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             } else if (player2.score == player1.score) {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
-                DrawText(scoreP2,385,620,50,DARKBROWN);
-                DrawText(scoreP1,760,620,50,DARKBROWN);
+                DrawText(scoreP1,385,620,50,DARKBROWN);
+                DrawText(scoreP2,760,620,50,DARKBROWN);
+                addscore(0,0);
+                if(IsKeyPressed(KEY_ENTER)){
+                    EndDrawing();
+                    return;}
             }
         }
         
