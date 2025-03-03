@@ -3,6 +3,8 @@
 #include "pingpong.h"
 #include "object.h"
 #include "style.h"
+#include "global.h"
+
 
 // Color definitions
 Color Green = Color{38, 185, 154, 255};
@@ -399,16 +401,30 @@ void playpingpong() {
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
+                if(IsKeyPressed(KEY_ENTER)){
+                    addscore(1,1);
+                    winsPlayer1[Round - 1] = 1;
+                    EndDrawing();
+                    return;}
             } else if (P2score > P1score) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
+                if(IsKeyPressed(KEY_ENTER)){
+                    addscore(2,1);
+                    winsPlayer2[Round - 1] = 1;
+                    EndDrawing();
+                    return;}
             } else if (P1score == P2score) {
                 result.draw(2);
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP1,780,620,50,DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
+                if(IsKeyPressed(KEY_ENTER)){
+                    addscore(0,0);
+                    EndDrawing();
+                    return;}
             }
         }
 

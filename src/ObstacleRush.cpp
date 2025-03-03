@@ -6,6 +6,7 @@
 #include "countdown.h"
 #include "object.h"
 #include "style.h"
+#include "global.h"
 
 using namespace std;
 
@@ -183,9 +184,19 @@ void playObstacleRush()
             if (P1win) {
                 result.draw(0);
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
+                if(IsKeyPressed(KEY_ENTER)){
+                    addscore(1,1);
+                    winsPlayer1[Round - 1] = 1;
+                    EndDrawing();
+                    return;}
             } else if (P2win) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
+                if(IsKeyPressed(KEY_ENTER)){
+                    addscore(2,1);
+                    winsPlayer2[Round - 1] = 1;
+                    EndDrawing();
+                    return;}
             }
         }
 
@@ -196,4 +207,5 @@ void playObstacleRush()
         }
 
     }
+    
 }
