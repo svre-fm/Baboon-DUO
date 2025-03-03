@@ -7,8 +7,6 @@ int winsPlayer1[5] = {0, 0, 0, 0, 0};
 int winsPlayer2[5] = {0, 0, 0, 0, 0}; 
 int gameCount = 0;
 int Round = 1;
-int p1wi = 0;
-int p2wi = 0;
 void addscore(int player ,int points){
     if(player == 0){
         return;

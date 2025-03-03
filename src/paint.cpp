@@ -249,9 +249,9 @@ void playpaint() {
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
                 DrawText(scoreP1,385,620,50,DARKBROWN);
                 DrawText(scoreP2,760,620,50,DARKBROWN);
-                addscore(1,1);
-                winsPlayer1[Round - 1] = 1;
                 if(IsKeyPressed(KEY_ENTER)){
+                    addscore(1,1);
+                    winsPlayer1[Round - 1] = 1;
                     EndDrawing();
                     return;}
             } else if (player2.score > player1.score) {
@@ -259,9 +259,9 @@ void playpaint() {
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
                 DrawText(scoreP1,385,620,50,DARKBROWN);
                 DrawText(scoreP2,760,620,50,DARKBROWN);
-                addscore(2,1);
-                winsPlayer2[Round - 1] = 1;
                 if(IsKeyPressed(KEY_ENTER)){
+                    addscore(2,1);
+                    winsPlayer2[Round - 1] = 1;
                     EndDrawing();
                     return;}
             } else if (player2.score == player1.score) {
@@ -269,8 +269,8 @@ void playpaint() {
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP1,385,620,50,DARKBROWN);
                 DrawText(scoreP2,760,620,50,DARKBROWN);
-                addscore(0,0);
                 if(IsKeyPressed(KEY_ENTER)){
+                    addscore(0,0);
                     EndDrawing();
                     return;}
             }

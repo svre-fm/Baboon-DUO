@@ -227,29 +227,38 @@ void Memory::Draw() {
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
                 DrawText(scoreP2, 405, 620, 50, DARKBROWN);
                 DrawText(scoreP1, 780, 620, 50, DARKBROWN);
-                addscore(1, 1);
-                winsPlayer1[Round - 1] = 1;
             } else if (player2_score > player1_score) {
                 DrawTexture(P2win, 0, 0, WHITE);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
                 DrawText(scoreP2, 405, 620, 50, DARKBROWN);
                 DrawText(scoreP1, 780, 620, 50, DARKBROWN);
-                addscore(2, 1);
-                winsPlayer2[Round - 1] = 1;
             } else {
                 DrawTexture(draw, 0, 0, WHITE);
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP2, 405, 620, 50, DARKBROWN);
                 DrawText(scoreP1, 780, 620, 50, DARKBROWN);
-                addscore(0, 0);
-                winsPlayer1[Round - 1] = 2;
             }
 
             // ตรวจสอบการกด ENTER เพื่อหยุดเกม
             if (IsKeyPressed(KEY_ENTER)) {
                 gameOver = true;  // ตั้งสถานะว่าเกมจบแล้ว
-                EndDrawing();
-                return;  // ออกจากฟังก์ชัน Draw()
+                if (player1_score > player2_score) {
+                    addscore(1, 1);
+                    winsPlayer1[Round - 1] = 1;
+                    EndDrawing();
+                    return;  // ออกจากฟังก์ชัน Draw()
+                } else if (player2_score > player1_score) {
+                    addscore(2, 1);
+                    winsPlayer2[Round - 1] = 1;
+                    EndDrawing();
+                    return;  // ออกจากฟังก์ชัน Draw()
+                } else {
+                    addscore(0, 0);
+                    winsPlayer1[Round - 1] = 2;
+                    EndDrawing();
+                    return;  // ออกจากฟังก์ชัน Draw()
+                }
+
             }
 
             EndDrawing();

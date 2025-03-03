@@ -26,19 +26,6 @@ int main() {
         rand_game[i] = rand_game[random_index];
         rand_game[random_index] = temp;
     }
-
-   /* for (size_t i = 0; i < sizeof(winsPlayer1) / sizeof(winsPlayer1[0]); i++) {
-        if (winsPlayer1[i] != 2){
-        p1wi += winsPlayer1[i];  // บวกค่าของอาร์เรย์เข้ากับ sum
-    }
-    }
-
-    for (size_t i = 0; i < sizeof(winsPlayer2) / sizeof(winsPlayer2[0]); i++) {
-        if (winsPlayer2[i] != 2){
-        p2wi += winsPlayer2[i];  // บวกค่าของอาร์เรย์เข้ากับ sum
-    }
-    }
-    */
     
     // สุ่มเลือกเกมที่จะแสดง
     int games_played = 0;  // ตัวแปรที่ใช้ติดตามจำนวนเกมที่เล่นแล้ว
@@ -61,6 +48,7 @@ int main() {
                         showtutorial_CM(Ready);
                         if (Ready) {
                             playcommand();
+                            Round++;
                             score();
                         }
                         break;
@@ -97,7 +85,7 @@ int main() {
                         if (Ready) {
                             play.Run();
                             Round++;
-                            score();                        }
+                            score();}
                         break;
 
                     default:
@@ -109,10 +97,12 @@ int main() {
                 if (games_played < 5) {
                     selected_game = rand_game[games_played];  // เลือกเกมถัดไปในลำดับที่สุ่ม
                 }
-                if (p1wi == 3) {
+                if (PLAY1_SCORE == 3) {
                     EndgameScore();  // เรียกฟังก์ชันเมื่อ p1 ชนะ 3 เกม
-                } else if (p2wi == 3) {
+                } else if (PLAY2_SCORE == 3) {
                     EndgameScore();  // เรียกฟังก์ชันเมื่อ p2 ชนะ 3 เกม
+                }else if(Round > 5){
+                    EndgameScore();
                 }
                 
             }

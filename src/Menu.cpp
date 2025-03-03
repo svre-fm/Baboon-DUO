@@ -106,12 +106,11 @@ void EndgameScore()
 }
 
 
-void score()
-{
+void score(){
     Texture2D scoreTexture = LoadTexture("pic/menu/scoreboard.png");  // โหลดภาพ scoreboard
     Texture2D win1 = LoadTexture("pic/menu/1win.png");    // รูปที่ 1
     Texture2D win2 = LoadTexture("pic/menu/2win.png");    // รูปที่ 2
-    Texture2D draw = LoadTexture("pic/menu/draw12.png"); 
+    Texture2D draw = LoadTexture("pic/menu/Draw.png"); 
     Texture2D blank = LoadTexture("pic/command/blank.png");   
     bool gamestart = false;  // สถานะเกมเริ่ม
     while (!WindowShouldClose()&&!gamestart)
@@ -120,6 +119,7 @@ void score()
         BeginDrawing();
 
         // วาด scoreboard
+
         DrawTexture(scoreTexture, 0, 0, WHITE);
         
 
