@@ -249,6 +249,7 @@ void playpaint() {
                 style.centerX("Player 1 win", 100, 110, DARKBROWN);
                 DrawText(scoreP1,385,620,50,DARKBROWN);
                 DrawText(scoreP2,760,620,50,DARKBROWN);
+
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
@@ -269,6 +270,7 @@ void playpaint() {
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP1,385,620,50,DARKBROWN);
                 DrawText(scoreP2,760,620,50,DARKBROWN);
+
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(0,0);
                     EndDrawing();

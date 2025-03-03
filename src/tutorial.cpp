@@ -41,6 +41,7 @@ class page{
         Texture2D PP_1;
         Texture2D PP_2;
         Texture2D PP_3;
+        Texture2D PP_4;
         Texture2D OB_1;
         Texture2D OB_2;
         Texture2D PC_1;
@@ -74,6 +75,7 @@ void page::load(){
     PP_1 = LoadTexture("pic/tutorial/PP_1.png");
     PP_2 = LoadTexture("pic/tutorial/PP_2.png");
     PP_3 = LoadTexture("pic/tutorial/PP_3.png");
+    PP_4 = LoadTexture("pic/tutorial/PP_4.png");
     bg_PP = LoadTexture("pic/tutorial/Pingpong.png");
     OB_1 = LoadTexture("pic/tutorial/OB_1.png");
     OB_2 = LoadTexture("pic/tutorial/OB_2.png");
@@ -98,6 +100,7 @@ void page::unload(){
     UnloadTexture(PP_1);
     UnloadTexture(PP_2);
     UnloadTexture(PP_3);
+    UnloadTexture(PP_4);
     UnloadTexture(bg_PP);
     UnloadTexture(OB_1);
     UnloadTexture(OB_2);
@@ -152,7 +155,9 @@ void page::drawpage_PP(int direction) const {
     case 2:
         DrawTexture(PP_3,0,0,WHITE);
         break;
-
+    case 3:
+        DrawTexture(PP_4,0,0,WHITE);
+        break;
     default :
         DrawTexture(PP_1,0,0,WHITE);
     }
@@ -349,20 +354,20 @@ void showtutorial_PP(bool& Ready){
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
                     page++;
-                    if(page > 2) page = 0;
+                    if(page > 3) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
                     page--;
-                    if(page < 0) page = 2;
+                    if(page < 0) page = 3;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
                     page++;
-                    if(page > 2) page = 0;
+                    if(page > 3) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
                     page--;
-                    if(page < 0) page = 2;
+                    if(page < 0) page = 3;
                 }
             }
 

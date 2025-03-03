@@ -380,7 +380,7 @@ void playpingpong() {
         DrawTexture(bg, 0, 0, WHITE);
 
         if (!game_over) {
-            if (!ballInvisible || (int)(invisibleTimer * 10) % 6 == 0) {
+            if (!ballInvisible || (int)(invisibleTimer * 10) % 4 == 0) {
                 ball1.drawbanana();
                 if (ball2Active) ball2.drawbanana();
             }
