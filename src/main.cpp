@@ -6,6 +6,7 @@
 #include "pingpong.h"
 #include "ObstacleRush.h"
 #include "tutorial.h"
+#include "Menu.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ int main() {
         ClearBackground(RAYWHITE);
 
         if (!state.isGameRunning) {
+            showMenu();
             DrawText("Select Game", 150, 50, 30, BLACK);
             DrawText("1. Command Master", 150, 150, 25, DARKGRAY);
             DrawText("2. PingPong", 150, 200, 25, DARKGRAY);
@@ -68,5 +70,5 @@ int main() {
     }
 
     CloseWindow(); 
-    return 0;
+    //return 0;
 }
