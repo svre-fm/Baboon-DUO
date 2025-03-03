@@ -192,7 +192,7 @@ void playObstacleRush()
             } else if (P2win) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
-                addscore(1,1);
+                addscore(2,1);
                 winsPlayer2[Round - 1] = 1;
                 if(IsKeyPressed(KEY_ENTER)){
                     EndDrawing();

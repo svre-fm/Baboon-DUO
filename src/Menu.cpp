@@ -6,6 +6,7 @@ using namespace std;
 #define SCREEN_WIDTH 1200
 #define SCREEN_HEIGHT 800
 
+
 void showMenu()
 {
     Texture2D startButtonTexture = LoadTexture("pic/menu/button.png");
@@ -79,25 +80,31 @@ void EndgameScore()
     Texture2D player2winTexture = LoadTexture("pic/menu/final(2)win.png");
     Texture2D playerDraw = LoadTexture("pic/menu/finalDraw.png");
     
-    bool gamestart = false;
     while (!WindowShouldClose())
     {  
-        if(!gamestart){
-            ClearBackground(RAYWHITE);
-            BeginDrawing();
-    
-            if(PLAY1_SCORE > PLAY2_SCORE) DrawTexture(player1winTexture,0,0,WHITE);
-            else if(PLAY2_SCORE < PLAY1_SCORE) DrawTexture(player2winTexture,0,0,WHITE);
-            else DrawTexture(playerDraw,0,0,WHITE);
-    
-            EndDrawing();
+        BeginDrawing(); // เริ่มการวาด
+        ClearBackground(RAYWHITE); 
 
-    }if (IsKeyPressed(KEY_ENTER)) {
-        CloseWindow(); 
+        // ตรวจสอบคะแนนแล้วแสดงภาพที่เหมาะสม
+        if (PLAY1_SCORE > PLAY2_SCORE)  
+            DrawTexture(player1winTexture, 0, 0, WHITE);
+        else if (PLAY2_SCORE > PLAY1_SCORE) 
+            DrawTexture(player2winTexture, 0, 0, WHITE);
+        else 
+            DrawTexture(playerDraw, 0, 0, WHITE);
+
+        EndDrawing(); // จบการวาด
+        
+        // ออกจากลูปเมื่อกด Enter
+        if (IsKeyPressed(KEY_ENTER)) {
+            break;
+        }
     }
-    
+
+    // ปิดหน้าต่างหลังออกจากลูป
+    CloseWindow();
 }
-}
+
 
 void score()
 {
@@ -114,22 +121,24 @@ void score()
 
         // วาด scoreboard
         DrawTexture(scoreTexture, 0, 0, WHITE);
+        
 
         for (int gameCount = 1; gameCount <= 5; gameCount++) {
             if (winsPlayer1[gameCount - 1] == 1) {
                 // ถ้า P1 ชนะในเกมนี้
-                DrawTexture(win1, 100 + (gameCount * 60), 300, WHITE);
+                DrawTexture(win1, 165 + (gameCount * 155), 375, WHITE);
             } else if (winsPlayer2[gameCount - 1] == 1) {
                 // ถ้า P2 ชนะในเกมนี้
-                DrawTexture(win2, 100 + (gameCount * 60), 300, WHITE);
+                DrawTexture(win2, 165 + (gameCount * 155), 375, WHITE);
             } else if(winsPlayer1[gameCount - 1] == 2){
                 // ถ้าเกมนี้เสมอ
-                DrawTexture(draw, 100 + (gameCount * 60), 300, WHITE);
+                DrawTexture(draw, 165 + (gameCount * 155), 375, WHITE);
             }else {
-                DrawTexture(blank, 100 + (gameCount * 60), 300, WHITE);
+                DrawTexture(blank, 165 + (gameCount * 155), 375, WHITE); 
             }
         }
 
+        
         // ตรวจสอบการกด ENTER เพื่อไปยังเกมถัดไป
         if (IsKeyPressed(KEY_ENTER)) {
             gamestart = true;  // เริ่มเกมใหม่
@@ -138,7 +147,6 @@ void score()
 
         EndDrawing();
     }
-
     // ปิดหน้าต่าง
     CloseWindow();
 }

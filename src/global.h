@@ -8,6 +8,8 @@ extern int winsPlayer1[5];
 extern int winsPlayer2[5];
 extern int gameCount;
 extern int Round;
+extern int p1wi;
+extern int p2wi;
 void addscore (int player ,int points);
 
 #endif
