@@ -104,7 +104,6 @@ int main() {
                 }else if(Round > 5){
                     EndgameScore();
                 }
-                
             }
         }
 
