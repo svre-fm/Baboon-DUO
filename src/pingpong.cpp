@@ -258,13 +258,9 @@ void playpingpong() {
     float ball_width = ball1.pic.width;
     float ball_height = ball1.pic.height;
 
-    InitAudioDevice();
-    Music game = LoadMusicStream("sound/pingpong.mp3");
-    PlayMusicStream(game);
-
     // เริ่มเกม
     while (!WindowShouldClose()) {
-        UpdateMusicStream(game);
+
         float deltaTime = GetFrameTime();
         powerUpTimer += deltaTime;
         if (ballInvisible) invisibleTimer += deltaTime;
@@ -446,8 +442,6 @@ void playpingpong() {
         }
 
     }
-    UnloadMusicStream(game);
-    CloseAudioDevice();
     powerUp.unload();
     player1.unload();
     player2.unload();

@@ -3,10 +3,6 @@
 #include "command.h"
 
 void playcommand() {
-    InitAudioDevice();
-    Music game = LoadMusicStream("sound/command.mp3");
-    PlayMusicStream(game);
-    
     // ตัวแปรเกมต่าง ๆ
     GameState state;
     texture texture;
@@ -31,7 +27,6 @@ void playcommand() {
     float wait = 1.5f;
 
     while (!WindowShouldClose()) {  
-        UpdateMusicStream(game); // อัพเดตเพลง
 
         BeginDrawing();
         ClearBackground(RAYWHITE);

@@ -95,6 +95,8 @@ void EndgameScore()
 {
     InitAudioDevice();
     Music musicmenu = LoadMusicStream("sound/win.mp3");
+    PlayMusicStream(musicmenu);
+
     Texture2D player1winTexture = LoadTexture("pic/menu/final(1)win.png");
     Texture2D player2winTexture = LoadTexture("pic/menu/final(2)win.png");
     Texture2D playerDraw = LoadTexture("pic/menu/finalDraw.png");
@@ -129,8 +131,9 @@ void EndgameScore()
 
 
 void score(){
-    InitAudioDevice();
-    Music musicmenu = LoadMusicStream("sound/menu.mp3");
+    // InitAudioDevice();
+    // Music musicmenu = LoadMusicStream("sound/menu.mp3");
+    // PlayMusicStream(musicmenu);
     Texture2D scoreTexture = LoadTexture("pic/menu/scoreboard.png");  // โหลดภาพ scoreboard
     Texture2D win1 = LoadTexture("pic/menu/1win.png");    // รูปที่ 1
     Texture2D win2 = LoadTexture("pic/menu/2win.png");    // รูปที่ 2
@@ -140,7 +143,7 @@ void score(){
     PlayMusicStream(musicmenu);
     
     while (!WindowShouldClose()&&!gamestart){
-        UpdateMusicStream(musicmenu);  
+       //UpdateMusicStream(musicmenu);  
         ClearBackground(RAYWHITE);
         BeginDrawing();
 
@@ -175,7 +178,7 @@ void score(){
 
         EndDrawing();
     }
-    UnloadMusicStream(musicmenu);
-    CloseAudioDevice();
-    CloseWindow();
+   //UnloadMusicStream(musicmenu);
+    // CloseAudioDevice();
+     CloseWindow();
 }

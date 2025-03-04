@@ -307,9 +307,6 @@ void Memory::Draw() {
 }
 
 void Memory::Run() {
-    InitAudioDevice();
-    Music game = LoadMusicStream("sound/memorygame.mp3");
-    PlayMusicStream(game);
     while (!WindowShouldClose()) {
         UpdateMusicStream(game);
         if (gameOver) {
