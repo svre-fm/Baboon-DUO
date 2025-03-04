@@ -1,8 +1,13 @@
-#include "command.h"
+#include <bits/stdc++.h>
 #include "global.h"
-#include <iostream>
+#include "command.h"
 
 void playcommand() {
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/command.mp3");
+    PlayMusicStream(game);
+    
+    // ตัวแปรเกมต่าง ๆ
     GameState state;
     texture texture;
     Position Position;
@@ -14,8 +19,8 @@ void playcommand() {
     check check;
     result result;
     style style;
-    generateCommand(state);
 
+    generateCommand(state);
     P1.setscale(0.45f);
     P2.setscale(0.45f);
     command.setscale(1.0f);
@@ -26,11 +31,14 @@ void playcommand() {
     float wait = 1.5f;
 
     while (!WindowShouldClose()) {  
+        UpdateMusicStream(game); // อัพเดตเพลง
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         texture.drawbg(0,0);
 
+        // ถ้าเกมยังไม่เริ่ม
         if (!state.gamestart) {
             state.countdown.update(GetFrameTime());
             if (state.countdown.isFinished()) {
@@ -44,21 +52,23 @@ void playcommand() {
             state.stagetime -= GetFrameTime();
             state.txttime -= GetFrameTime();
 
+            // เงื่อนไขในแต่ละช่วงเวลา
             if (state.stagetime <= 0) {
-                        state.stage++;
-                        if (state.stage == 2) {
-                            state.stagetime = 10.0f;
-                            generateCommand(state);
-                        }
-                        if (state.stage == 3) {
-                            state.stagetime = 30.0f;
-                            generateCommand(state);
-                        }
-                        if (state.stage > 3) {
-                            state.gameOver = true;
-                        }
+                state.stage++;
+                if (state.stage == 2) {
+                    state.stagetime = 10.0f;
+                    generateCommand(state);
+                }
+                if (state.stage == 3) {
+                    state.stagetime = 30.0f;
+                    generateCommand(state);
+                }
+                if (state.stage > 3) {
+                    state.gameOver = true;
+                }
             }
 
+            // การตรวจสอบการคลิกและรอคำสั่ง
             if (!state.waitfornextcommand) {
                 checkInput(state);
                 if ((state.p1Pressed && state.p2Pressed) || state.txttime <= 0) {
@@ -66,13 +76,14 @@ void playcommand() {
                     state.waitTime = 1.5f;
                 }
             } else {
-                state.waitTime -= GetFrameTime(); // Countdown for waiting 3 seconds
+                state.waitTime -= GetFrameTime();
                 if (state.waitTime <= 0) {
-                    generateCommand(state); // Generate new command
+                    generateCommand(state);
                 }
             }
         }
 
+        // แสดงข้อความเมื่อเกมเริ่ม
         if (!state.gamestart) {
             string displaytext = state.countdown.getDisplayText();
             style.centerXY(displaytext, 100, WHITE);
@@ -88,7 +99,7 @@ void playcommand() {
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
                     EndDrawing();
-                    return;}
+                    break;}
             } else if (state.scorep2 > state.scorep1) {
                 result.draw(1);
                 style.centerX("Player 2 win", 100, 110, DARKBROWN);
@@ -98,8 +109,8 @@ void playcommand() {
                     addscore(2,1);
                     winsPlayer2[Round - 1] = 1;
                     EndDrawing();
-                    return;}
-            } else if (state.scorep1 == state.scorep2) {
+                    break;}
+            } else {
                 result.draw(2);
                 style.centerX("Draw", 150, 110, DARKBROWN);
                 DrawText(scoreP2,405,620,50,DARKBROWN);
@@ -108,15 +119,16 @@ void playcommand() {
                     addscore(0,0);
                     winsPlayer1[Round - 1] = 2;
                     EndDrawing();
-                    return;}
+                    break;}
             }
         } else {
-
+            // การวาดตัวละครและคำสั่ง
             P1.draw(Position.P1, state.p1CurrentFrame);
             P2.draw(Position.P2, state.p2CurrentFrame);
             check.draw(Position.checkP1, state.p1correct);
             check.draw(Position.checkP2, state.p2correct);
-
+            
+            // การแสดงผลคำสั่ง
             if (!state.waitfornextcommand) {
                 if (state.isOppositeCommand) {
                     commander.draw(Position.C2, 3);
@@ -144,12 +156,15 @@ void playcommand() {
             style.drawTextBox(scoreTextP2, 35, 22, 30, RED, WHITE, RED,2);
             texture.drawP1(0,-5);
             texture.drawP2(0,-5);
-
         }
+
         EndDrawing();
         if (WindowShouldClose()) {
             break; 
         }
     }
-
+    
+    // ปิดการใช้งานเสียงและทรัพยากร
+    UnloadMusicStream(game);
+    CloseAudioDevice();
 }

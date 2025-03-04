@@ -38,7 +38,12 @@ void playObstacleRush()
     bool P2win = false;
     Countdown countdown = Countdown(3.0f);
 
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/obstaclerush.mp3");
+    PlayMusicStream(game);
+
     while (!WindowShouldClose()) {    
+        UpdateMusicStream(game);
         float dt = GetFrameTime();
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -207,5 +212,8 @@ void playObstacleRush()
         }
 
     }
+    
+    UnloadMusicStream(game);
+    CloseAudioDevice();
     
 }
