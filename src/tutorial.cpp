@@ -242,7 +242,12 @@ void page::drawready(float X,float Y){
 void showtutorial_CM(bool& Ready){
     page tutorial;
     int page = 0;
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3");
+    PlayMusicStream(game);
     while(!WindowShouldClose()){
+        UpdateMusicStream(game);
         tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
@@ -253,25 +258,35 @@ void showtutorial_CM(bool& Ready){
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }
 
-            if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
-            if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
+            if(IsKeyPressed(KEY_ENTER)){
+                PlaySound(clickSound);
+                tutorial.P1press = true;
+            } 
+            if(IsKeyPressed(KEY_SPACE)){
+                PlaySound(clickSound);
+                tutorial.P2press = true;
+            }
                 
             if(tutorial.P2press) tutorial.drawready(10,565);
             if(tutorial.P1press) tutorial.drawready(1006,575);
@@ -288,12 +303,19 @@ void showtutorial_CM(bool& Ready){
     
         EndDrawing();
     }
-    
+    UnloadSound(clickSound);
+    UnloadMusicStream(game);
+    CloseAudioDevice();
 }
 void showtutorial_MM(bool& Ready){
     page tutorial;
     int page = 0;
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3");
+    PlayMusicStream(game);
     while(!WindowShouldClose()){
+        UpdateMusicStream(game);
         tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
@@ -304,25 +326,35 @@ void showtutorial_MM(bool& Ready){
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }
 
-            if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
-            if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
+            if(IsKeyPressed(KEY_ENTER)){
+                PlaySound(clickSound);
+                tutorial.P1press = true;
+            } 
+            if(IsKeyPressed(KEY_SPACE)){
+                PlaySound(clickSound);
+                tutorial.P2press = true;
+            }
                 
             if(tutorial.P2press) tutorial.drawready(10,565);
             if(tutorial.P1press) tutorial.drawready(1006,575);
@@ -338,12 +370,20 @@ void showtutorial_MM(bool& Ready){
     
         EndDrawing();
     }
+    UnloadSound(clickSound);
+    UnloadMusicStream(game);
+    CloseAudioDevice();
 }
 
 void showtutorial_PP(bool& Ready){
     page tutorial;
     int page = 0;
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3");
+    PlayMusicStream(game);
     while(!WindowShouldClose()){
+        UpdateMusicStream(game);
         tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
@@ -354,25 +394,35 @@ void showtutorial_PP(bool& Ready){
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 3) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 3;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 3) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 3;
                 }
             }
 
-            if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
-            if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
+            if(IsKeyPressed(KEY_ENTER)){
+                PlaySound(clickSound);
+                tutorial.P1press = true;
+            } 
+            if(IsKeyPressed(KEY_SPACE)){
+                PlaySound(clickSound);
+                tutorial.P2press = true;
+            }
                 
             if(tutorial.P2press) tutorial.drawready(10,565);
             if(tutorial.P1press) tutorial.drawready(1006,575);
@@ -388,11 +438,20 @@ void showtutorial_PP(bool& Ready){
     
         EndDrawing();
     }
+    UnloadSound(clickSound);
+    UnloadMusicStream(game);
+    CloseAudioDevice();
 }
+
 void showtutorial_OB(bool& Ready){
     page tutorial;
     int page = 0;
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3"); // โหลดเสียงคลิก
+    PlayMusicStream(game);
     while(!WindowShouldClose()){
+        UpdateMusicStream(game);
         tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
@@ -403,25 +462,35 @@ void showtutorial_OB(bool& Ready){
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
                     page++;
+                    PlaySound(clickSound);
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
                     page--;
+                    PlaySound(clickSound);
                     if(page < 0) page = 2;
                 }
             }
 
-            if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
-            if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
+            if(IsKeyPressed(KEY_ENTER)){
+                PlaySound(clickSound);
+                tutorial.P1press = true;
+            } 
+            if(IsKeyPressed(KEY_SPACE)){
+                PlaySound(clickSound);
+                tutorial.P2press = true;
+            }
                 
             if(tutorial.P2press) tutorial.drawready(10,565);
             if(tutorial.P1press) tutorial.drawready(1006,575);
@@ -437,11 +506,22 @@ void showtutorial_OB(bool& Ready){
     
         EndDrawing();
     }
+    UnloadSound(clickSound);
+    UnloadMusicStream(game);
+    CloseAudioDevice();
 }
+
 void showtutorial_PC(bool& Ready){
     page tutorial;
     int page = 0;
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3"); // โหลดเสียงคลิก
+
+    PlayMusicStream(game);
+    
     while(!WindowShouldClose()){
+        UpdateMusicStream(game);
         tutorial.mousePos = GetMousePosition();
         BeginDrawing();
 
@@ -451,26 +531,36 @@ void showtutorial_PC(bool& Ready){
 
             if(tutorial.showFirstImage){
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright))){
+                    PlaySound(clickSound); // เล่นเสียงคลิก
                     page++;
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft))){
+                    PlaySound(clickSound); // เล่นเสียงคลิก
                     page--;
                     if(page < 0) page = 2;
                 }
             }else{
                 if(IsKeyPressed(KEY_RIGHT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTright_up))){
+                    PlaySound(clickSound); // เล่นเสียงคลิก
                     page++;
                     if(page > 2) page = 0;
                 }
                 if(IsKeyPressed(KEY_LEFT) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(tutorial.mousePos, tutorial.BTleft_up))){
+                    PlaySound(clickSound); // เล่นเสียงคลิก
                     page--;
                     if(page < 0) page = 2;
                 }
             }
 
-            if(IsKeyPressed(KEY_ENTER)) tutorial.P1press = true;
-            if(IsKeyPressed(KEY_SPACE)) tutorial.P2press = true;
+            if(IsKeyPressed(KEY_ENTER)) {
+                PlaySound(clickSound); // เล่นเสียงคลิก
+                tutorial.P1press = true;
+            }
+            if(IsKeyPressed(KEY_SPACE)) {
+                PlaySound(clickSound); // เล่นเสียงคลิก
+                tutorial.P2press = true;
+            }
                 
             if(tutorial.P2press) tutorial.drawready(10,565);
             if(tutorial.P1press) tutorial.drawready(1006,575);
@@ -486,5 +576,10 @@ void showtutorial_PC(bool& Ready){
     
         EndDrawing();
     }
+
+    UnloadMusicStream(game);
+    UnloadSound(clickSound); // ปลดปล่อยหน่วยความจำของเสียงคลิก
+    CloseAudioDevice();
 }
+
 

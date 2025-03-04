@@ -7,21 +7,27 @@ using namespace std;
 #define SCREEN_HEIGHT 800
 
 
-void showMenu()
-{
+void showMenu(){
+    InitAudioDevice();
+    Music musicmenu = LoadMusicStream("sound/menu.mp3");
+    Sound clickSound = LoadSound("sound/click.mp3");
     Texture2D startButtonTexture = LoadTexture("pic/menu/button.png");
     Texture2D backgraoundTexture = LoadTexture("pic/menu/Background.PNG");
+    PlayMusicStream(musicmenu);
     
     // กำหนดขนาดเริ่มต้นของปุ่ม
     float baseWidth = startButtonTexture.width;
     float baseHeight = startButtonTexture.height;
     float scale = 1.0f;
     float rotation = 0;
+    double waittime = -1.0;
+    bool click = false;
     bool increasing = true; // ใช้ควบคุมการหมุนไปกลับ
     bool gamestart = false;
     bool game_over = false;
     
     while (!WindowShouldClose() && !gamestart){  
+        UpdateMusicStream(musicmenu);
         Vector2 mousePoint = GetMousePosition();
         Rectangle buttonRec = { SCREEN_WIDTH / 2 - 100, 
                                 SCREEN_HEIGHT / 2 + 50, 
@@ -50,9 +56,18 @@ void showMenu()
             }
     
             // ตรวจสอบการคลิกปุ่ม
-            if (isHover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-            {
-                gamestart = true;
+            if (isHover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                PlaySound(clickSound);
+                click = true;
+            }
+
+            if(click){
+                if (waittime < 0){
+                    waittime = GetTime();
+                } else if (GetTime() - waittime >= 1.0) {
+                    gamestart = true;
+                    break;
+                }
             }
 
             Rectangle sourceRec = { 0, 0, (float)startButtonTexture.width, (float)startButtonTexture.height };
@@ -70,18 +85,22 @@ void showMenu()
             }
         }
     }
-
+    UnloadSound(clickSound);
+    UnloadMusicStream(musicmenu);
+    CloseAudioDevice();
     return; 
 }
 
 void EndgameScore()
 {
+    InitAudioDevice();
+    Music musicmenu = LoadMusicStream("sound/win.mp3");
     Texture2D player1winTexture = LoadTexture("pic/menu/final(1)win.png");
     Texture2D player2winTexture = LoadTexture("pic/menu/final(2)win.png");
     Texture2D playerDraw = LoadTexture("pic/menu/finalDraw.png");
     
-    while (!WindowShouldClose())
-    {  
+    while (!WindowShouldClose()){
+        UpdateMusicStream(musicmenu);  
         BeginDrawing(); // เริ่มการวาด
         ClearBackground(RAYWHITE); 
 
@@ -100,21 +119,23 @@ void EndgameScore()
             break;
         }
     }
-
-    // ปิดหน้าต่างหลังออกจากลูป
+    UnloadMusicStream(musicmenu);
+    CloseAudioDevice();
     CloseWindow();
 }
 
 
 void score(){
+    InitAudioDevice();
+    Music musicmenu = LoadMusicStream("sound/menu.mp3");
     Texture2D scoreTexture = LoadTexture("pic/menu/scoreboard.png");  // โหลดภาพ scoreboard
     Texture2D win1 = LoadTexture("pic/menu/1win.png");    // รูปที่ 1
     Texture2D win2 = LoadTexture("pic/menu/2win.png");    // รูปที่ 2
     Texture2D draw = LoadTexture("pic/menu/Draw.png"); 
     Texture2D blank = LoadTexture("pic/command/blank.png");   
     bool gamestart = false;  // สถานะเกมเริ่ม
-    while (!WindowShouldClose()&&!gamestart)
-    {
+    while (!WindowShouldClose()&&!gamestart){
+        UpdateMusicStream(musicmenu);  
         ClearBackground(RAYWHITE);
         BeginDrawing();
 
@@ -147,6 +168,7 @@ void score(){
 
         EndDrawing();
     }
-    // ปิดหน้าต่าง
+    UnloadMusicStream(musicmenu);
+    CloseAudioDevice();
     CloseWindow();
 }
