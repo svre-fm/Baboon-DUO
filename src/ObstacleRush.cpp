@@ -192,6 +192,8 @@ void playObstacleRush()
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             } else if (P2win) {
@@ -200,6 +202,8 @@ void playObstacleRush()
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(2,1);
                     winsPlayer2[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             }
@@ -212,8 +216,6 @@ void playObstacleRush()
         }
 
     }
-    
     UnloadMusicStream(game);
     CloseAudioDevice();
-    
 }

@@ -98,7 +98,8 @@ void EndgameScore()
     Texture2D player1winTexture = LoadTexture("pic/menu/final(1)win.png");
     Texture2D player2winTexture = LoadTexture("pic/menu/final(2)win.png");
     Texture2D playerDraw = LoadTexture("pic/menu/finalDraw.png");
-    
+    PlayMusicStream(musicmenu);
+
     while (!WindowShouldClose()){
         UpdateMusicStream(musicmenu);  
         BeginDrawing(); // เริ่มการวาด
@@ -116,6 +117,8 @@ void EndgameScore()
         
         // ออกจากลูปเมื่อกด Enter
         if (IsKeyPressed(KEY_ENTER)) {
+            UnloadMusicStream(musicmenu);
+            CloseAudioDevice();
             break;
         }
     }
@@ -134,6 +137,8 @@ void score(){
     Texture2D draw = LoadTexture("pic/menu/Draw.png"); 
     Texture2D blank = LoadTexture("pic/command/blank.png");   
     bool gamestart = false;  // สถานะเกมเริ่ม
+    PlayMusicStream(musicmenu);
+    
     while (!WindowShouldClose()&&!gamestart){
         UpdateMusicStream(musicmenu);  
         ClearBackground(RAYWHITE);
@@ -163,6 +168,8 @@ void score(){
         // ตรวจสอบการกด ENTER เพื่อไปยังเกมถัดไป
         if (IsKeyPressed(KEY_ENTER)) {
             gamestart = true;  // เริ่มเกมใหม่
+            UnloadMusicStream(musicmenu);
+            CloseAudioDevice();
             return;  // ออกจากฟังก์ชัน score() ทันที
         }
 

@@ -98,6 +98,8 @@ void playcommand() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     break;}
             } else if (state.scorep2 > state.scorep1) {
@@ -108,6 +110,8 @@ void playcommand() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(2,1);
                     winsPlayer2[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     break;}
             } else {
@@ -118,6 +122,8 @@ void playcommand() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(0,0);
                     winsPlayer1[Round - 1] = 2;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     break;}
             }
@@ -165,6 +171,4 @@ void playcommand() {
     }
     
     // ปิดการใช้งานเสียงและทรัพยากร
-    UnloadMusicStream(game);
-    CloseAudioDevice();
 }
