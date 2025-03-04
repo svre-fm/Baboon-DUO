@@ -92,8 +92,12 @@ void playpaint() {
     float timer = gameTime;
     bool gameRunning = true;
 
+    InitAudioDevice();
+    Music game = LoadMusicStream("sound/paint.mp3");
+    PlayMusicStream(game);
+    
     while (!WindowShouldClose() && gameRunning) {
-
+        UpdateMusicStream(game);
         if(!gamestart){
             countdown.update(GetFrameTime());
             if (countdown.isFinished()) {
@@ -280,7 +284,6 @@ void playpaint() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(0,0);
                     UnloadMusicStream(game);
-                    gameRunning = false;
                     CloseAudioDevice();
                     EndDrawing();
                     return;}
@@ -293,8 +296,8 @@ void playpaint() {
             break; 
         }
     }
-
-
+    UnloadMusicStream(game);
+    CloseAudioDevice();
     UnloadTexture(bg);
     UnloadTexture(ground);
     UnloadTexture(p1);
