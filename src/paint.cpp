@@ -242,7 +242,6 @@ void playpaint() {
         DrawText(TextFormat("Time: %.1f", timer), 530, 100, 30, WHITE);
         }else{
             UnloadTexture(score_bg);
-    
             const char* scoreP2 = TextFormat("%d", player1.score);
             const char* scoreP1 = TextFormat("%d", player2.score);
             if (player1.score > player2.score) {
@@ -254,6 +253,9 @@ void playpaint() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    gameRunning = false;
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             } else if (player2.score > player1.score) {
@@ -264,6 +266,9 @@ void playpaint() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(2,1);
                     winsPlayer2[Round - 1] = 1;
+                    gameRunning = false;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             } else if (player2.score == player1.score) {
@@ -274,6 +279,9 @@ void playpaint() {
 
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(0,0);
+                    UnloadMusicStream(game);
+                    gameRunning = false;
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             }

@@ -308,14 +308,16 @@ void Memory::Draw() {
 
 void Memory::Run() {
     while (!WindowShouldClose()) {
-        if (gameOver) {  // ถ้าเกมจบ, หยุดการทำงานของลูป
+        UpdateMusicStream(game);
+        if (gameOver) {
+            UnloadMusicStream(game);
+            CloseAudioDevice(); 
             break;
         }
         
         Update();  // เรียกฟังก์ชัน Update
         Draw();    // เรียกฟังก์ชัน Draw
     }
-
     UnloadTexture(img1);
     UnloadTexture(img2);
     UnloadTexture(img3);

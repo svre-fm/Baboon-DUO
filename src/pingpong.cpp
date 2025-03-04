@@ -405,6 +405,8 @@ void playpingpong() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(1,1);
                     winsPlayer1[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             } else if (P2score > P1score) {
@@ -415,6 +417,8 @@ void playpingpong() {
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(2,1);
                     winsPlayer2[Round - 1] = 1;
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             } else if (P1score == P2score) {
@@ -424,6 +428,8 @@ void playpingpong() {
                 DrawText(scoreP2,405,620,50,DARKBROWN);
                 if(IsKeyPressed(KEY_ENTER)){
                     addscore(0,0);
+                    UnloadMusicStream(game);
+                    CloseAudioDevice();
                     EndDrawing();
                     return;}
             }
