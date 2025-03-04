@@ -307,12 +307,7 @@ void Memory::Draw() {
 }
 
 void Memory::Run() {
-    InitAudioDevice();
-    Music game = LoadMusicStream("sound/memorygame.mp3");
-    PlayMusicStream(game);
     while (!WindowShouldClose()) {
-        
-        UpdateMusicStream(game);
         if (gameOver) {  // ถ้าเกมจบ, หยุดการทำงานของลูป
             break;
         }
@@ -320,8 +315,7 @@ void Memory::Run() {
         Update();  // เรียกฟังก์ชัน Update
         Draw();    // เรียกฟังก์ชัน Draw
     }
-    UnloadMusicStream(game);
-    CloseAudioDevice();
+
     UnloadTexture(img1);
     UnloadTexture(img2);
     UnloadTexture(img3);
